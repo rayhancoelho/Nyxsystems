@@ -1,369 +1,377 @@
-import { useState, useReducer } from "react";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rayhan Stories — Controle</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #050508; font-family: system-ui, -apple-system, sans-serif; }
+  textarea { font-family: 'JetBrains Mono', monospace; }
+  button { font-family: 'JetBrains Mono', monospace; }
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: #0a0a0f; }
+  ::-webkit-scrollbar-thumb { background: #1a1a2e; border-radius: 2px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useReducer } = React;
 
-const DAYS = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+const DAYS = ["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"];
 
-const BLOCK_META = {
-  B1: { name: "Abertura", color: "#e94560", emoji: "◉" },
-  B2: { name: "Rotina Matinal", color: "#0f3460", emoji: "☀" },
-  B3: { name: "Produtividade", color: "#034078", emoji: "⚡" },
-  B4: { name: "Conversa", color: "#e43f5a", emoji: "💬" },
-  B5: { name: "Posicionamento", color: "#c72c41", emoji: "📍" },
-  B6: { name: "Protocolo Sono", color: "#190061", emoji: "☽" },
-  B7: { name: "Fechamento", color: "#950740", emoji: "⬛" },
+const BM = {
+  B1:{n:"ABERTURA",c:"#e94560",e:"◉"},
+  B2:{n:"ROTINA MATINAL",c:"#0f3460",e:"☀"},
+  B3:{n:"PRODUTIVIDADE",c:"#034078",e:"⚡"},
+  B4:{n:"CONVERSA",c:"#e43f5a",e:"💬"},
+  B5:{n:"POSICIONAMENTO",c:"#c72c41",e:"📍"},
+  B6:{n:"PROTOCOLO SONO",c:"#6a0572",e:"☽"},
+  B7:{n:"FECHAMENTO",c:"#950740",e:"⬛"},
 };
 
-const makeStory = (time, block, desc, cenario, elementos, fala, formato) => ({
-  time, block, desc, cenario, elementos, fala, formato
-});
+const S=(t,b,d,fo,ce,el,fa)=>({t,b,d,fo,ce,el,fa});
 
-const SCHEDULE = {
-  Segunda: [
-    makeStory("06:30", "B1", "S1 — Abertura", "Quarto, luz baixa", "Rosto recém-acordado", "Agenda do dia + 'O dia começou ontem'", "Vídeo falando (fixo)"),
-    makeStory("06:30", "B1", "S2 — Contexto do dia", "—", "Tênis / cama arrumada / celular 06:30", "Causa/consequência ou reflexão", "Foto + texto"),
-    makeStory("06:30", "B2", "Hábito matinal 1", "Banheiro / quarto", "Chuveiro, água, pés no chão", "Bordão do hábito ou porquê técnico", "Vídeo sem fala + texto"),
-    makeStory("06:35", "B2", "Hábito matinal 2", "Quarto / janela", "Copo d'água, celular longe, sol", "Porquê técnico ou consistência", "Foto + texto"),
-    makeStory("06:50", "B2", "Treino (indo)", "Caminho academia, rua", "Tênis, mochila, rua", "Transição ou contraste", "Foto + texto"),
-    makeStory("08:15", "B2", "Treino (pós)", "Academia / ar livre", "Rosto suado, sem filtro", "Conexão treino→sono ou vulnerabilidade", "Vídeo falando"),
-    makeStory("08:45", "B3", "Faculdade", "Sala de aula", "Caderno, caneta, material", "Contexto ou aprendizado extraído", "Foto + texto"),
-    makeStory("09:30", "B4", "Enquete / Caixinha", "Foto do momento + sticker", "Mesa, café, pós-treino", "Pergunta de dor ou comportamento", "Foto + sticker"),
-    makeStory("10:10", "B2", "Nyx (Rayhan manhã)", "Mesa, computador", "Tela, caderno, fone", "Backstage ou contexto", "Storyvlog"),
-    makeStory("12:30", "B3", "Almoço", "Mesa, prato", "Prato de comida forte", "Refeição forte / janta leve / sono agradece", "Foto + texto"),
-    makeStory("13:10", "B3", "Nyx Project", "Mesa trabalho", "Computador, caderno, fone", "Deep work / conexão sono→foco", "Storyvlog"),
-    makeStory("13:30", "B4", "Resposta caixinha/enquete", "—", "Print da resposta", "Dar nome + solução + CTA", "Print + texto"),
-    makeStory("14:30", "B3", "Reflexão / Contrapopular", "—", "Tela preta ou foto contexto", "Contrapopular do banco (sono/estresse/produtividade)", "Tela preta + texto"),
-    makeStory("15:00", "B5", "Posicionamento (embutido)", "Dentro de outro story", "—", "Frase de posicionamento do ângulo da semana", "Embutido"),
-    makeStory("15:30", "B3", "Pausa anti-estresse", "Corredor, rua, ar livre", "Mão no peito, passos, ar", "O estresse não acumula se você não deixa", "Foto/vídeo + texto"),
-    makeStory("16:30", "B3", "Janta", "Mesa", "Prato leve", "Última refeição / conexão alimentação→sono", "Foto + texto"),
-    makeStory("17:10", "B3", "Leitura 17h", "Ambiente calmo, luz tarde", "Livro aberto, café/chá", "Desaceleração / primeiro passo protocolo", "Storyvlog"),
-    makeStory("18:30", "B3", "Faculdade noite", "Sala de aula", "Caderno, óculos bloqueadores", "Contexto ou óculos bloqueadores como marca", "Foto + texto"),
-    makeStory("19:45", "B3", "Diário entre aulas", "Mesa, caderno", "Diário aberto, caneta", "Esvaziar a cabeça / journaling", "Foto + texto"),
-    makeStory("20:15", "B3", "Aula noite 2", "Sala de aula", "Caderno, óculos bloqueadores", "Contexto", "Foto + texto"),
-    makeStory("21:15", "B6", "Banho quente + reflexão noturna", "Banheiro, vapor, luz quente", "Vapor, luz quente", "A parte mais importante: parar", "Vídeo falando (calmo)"),
-    makeStory("22:00", "B6", "Etapa protocolo 1", "Quarto preparado", "Chá, banana, difusor, blackout", "Porquê técnico da etapa", "Foto + texto"),
-    makeStory("22:15", "B6", "Etapa protocolo 2", "Quarto escuro", "Protetor, dilatador, blackout", "Sinal pro cérebro / escuridão total", "Foto + texto"),
-    makeStory("22:30", "B6", "Leitura noturna", "Quarto, luz mínima", "Livro, luz quente", "Leitura / arco do livro", "Storyvlog"),
-    makeStory("22:50", "B7", "Ponto final", "Quarto escuro / tela preta", "Escuridão, celular modo avião", "Segunda sobrevivida. Ponto final.", "Foto escura + texto"),
-  ],
-  Terça: [
-    makeStory("06:30", "B1", "S1 — Abertura", "Janela / quarto", "Janela, pés cama, celular", "Consistência silenciosa", "Foto + texto"),
-    makeStory("06:30", "B1", "S2 — Contexto", "—", "Copo d'água, mesa, céu", "Sem drama. Dormiu bem, acordou bem.", "Foto + texto"),
-    makeStory("06:30", "B2", "Hábito matinal 1", "Banheiro / quarto", "Chuveiro, água, sol", "Bordão ou porquê técnico", "Vídeo sem fala + texto"),
-    makeStory("06:35", "B2", "Hábito matinal 2", "Quarto / janela", "Pés chão, celular longe, alongamento", "Porquê técnico", "Foto + texto"),
-    makeStory("06:50", "B2", "Rayhan", "Mesa, computador", "Tela, caderno", "Produção de conteúdo antes do treino", "Storyvlog"),
-    makeStory("10:10", "B2", "Treino (indo)", "Caminho, rua", "Tênis, caminho", "3h de produção, agora o corpo", "Foto + texto"),
-    makeStory("12:00", "B2", "Treino (pós/corrida)", "Ar livre", "Rosto suado, paisagem", "O estresse sai pelas pernas", "Vídeo sem fala + texto"),
-    makeStory("09:30", "B4", "Caixinha dor", "Foto momento + sticker", "Mesa trabalho, café", "O que mais te impede de dormir?", "Foto + sticker"),
-    makeStory("12:30", "B3", "Almoço", "Mesa", "Prato forte", "Refeição forte", "Foto + texto"),
-    makeStory("13:10", "B3", "Nyx Project", "Mesa trabalho", "Computador, fone", "Deep work", "Storyvlog"),
-    makeStory("13:30", "B4", "Resposta 1", "—", "Print resposta", "Dar nome + solução", "Print + texto"),
-    makeStory("14:30", "B4", "Resposta 2 + posicionamento", "—", "Print resposta", "Aprofundar + encaixar posicionamento", "Print + vídeo falando"),
-    makeStory("15:30", "B3", "Pausa anti-estresse", "Corredor, ar", "Respiração, caminhada", "O estresse não acumula", "Foto + texto"),
-    makeStory("16:30", "B3", "Janta", "Mesa", "Prato leve", "Última refeição", "Foto + texto"),
-    makeStory("17:10", "B3", "Leitura 17h", "Ambiente calmo", "Livro, luz tarde", "Desaceleração", "Storyvlog"),
-    makeStory("18:30", "B3", "Faculdade", "Sala de aula", "Caderno, óculos bloqueadores", "Contexto", "Foto + texto"),
-    makeStory("19:45", "B3", "Diário", "Mesa", "Diário, caneta", "Journaling", "Foto + texto"),
-    makeStory("20:30", "B6", "Banho quente + reflexão", "Banheiro, luz quente", "Vapor, luz quente", "A parte mais importante: parar", "Vídeo falando (calmo)"),
-    makeStory("21:00", "B6", "Etapa protocolo", "Quarto", "Chá, banana, difusor", "Porquê técnico", "Foto + texto"),
-    makeStory("21:30", "B6", "Leitura noturna", "Quarto, luz mínima", "Livro", "Desaceleração / arco do livro", "Storyvlog"),
-    makeStory("22:10", "B6", "Etapa protocolo 2", "Quarto escuro", "Blackout, protetor, 4-7-8", "Escuridão total", "Foto + texto"),
-    makeStory("22:50", "B7", "Ponto final", "Quarto escuro / tela preta", "Escuridão", "Ponto final. Boa noite.", "Foto escura + texto"),
-  ],
-  Quarta: [
-    makeStory("06:30", "B1", "S1 — Abertura", "Janela / cortina", "Janela, cama, livro", "Metade da semana + acumulado", "Foto + texto"),
-    makeStory("06:30", "B1", "S2 — Contexto", "—", "Café, rosto, livro mesa", "O acumulado aparece", "Vídeo falando / Foto"),
-    makeStory("06:30", "B2", "Hábito matinal 1", "Banheiro / quarto", "Chuveiro, sol, pés", "Bordão ou porquê", "Vídeo sem fala + texto"),
-    makeStory("06:50", "B2", "Rayhan (curto)", "Mesa", "Computador, caderno", "45 min produção", "Storyvlog"),
-    makeStory("07:35", "B2", "Hábito matinal 2", "Quarto / janela", "Água, respiração, alongamento", "Antes do treino", "Foto + texto"),
-    makeStory("07:50", "B2", "Treino", "Academia", "Execução, peso", "Terceiro dia seguido", "Vídeo sem fala + texto"),
-    makeStory("09:30", "B2", "Treino (corrida)", "Ar livre", "Percurso, paisagem", "O estresse sai pelas pernas", "Vídeo sem fala + texto"),
-    makeStory("10:15", "B3", "Faculdade / Aula", "Sala de aula", "Caderno, material", "Contexto", "Foto + texto"),
-    makeStory("11:00", "B4", "Caixinha opinião", "Foto + sticker", "Livro, café, mesa", "Trabalhar mais = produzir mais?", "Foto + sticker"),
-    makeStory("12:30", "B3", "Almoço", "Mesa", "Prato forte", "Refeição forte", "Foto + texto"),
-    makeStory("13:10", "B3", "Nyx Project", "Mesa trabalho", "Computador", "Deep work", "Storyvlog"),
-    makeStory("13:30", "B4", "Resposta", "—", "Print", "Contrapopular a partir da resposta", "Print + texto"),
-    makeStory("14:30", "B3", "Reflexão / Contrapopular", "—", "Tela preta", "Contrapopular produtividade", "Tela preta + texto"),
-    makeStory("15:30", "B3", "Pausa", "Corredor", "Respiração", "Pausa", "Foto + texto"),
-    makeStory("16:30", "B3", "Janta", "Mesa", "Prato leve", "Última refeição", "Foto + texto"),
-    makeStory("17:10", "B3", "Leitura 17h", "Ambiente calmo", "Livro", "Desaceleração", "Storyvlog"),
-    makeStory("18:30", "B3", "Faculdade noite", "Sala", "Caderno, óculos bloqueadores", "Contexto", "Foto + texto"),
-    makeStory("19:45", "B3", "Diário", "Mesa", "Diário", "Journaling", "Foto + texto"),
-    makeStory("20:30", "B6", "Banho quente + reflexão", "Banheiro, luz quente", "Vapor", "Parar / significado protocolo", "Vídeo falando (calmo)"),
-    makeStory("21:00", "B6", "Etapa protocolo", "Quarto", "Chá, difusor, celular fora", "Porquê técnico", "Foto + texto"),
-    makeStory("21:30", "B6", "Leitura noturna", "Quarto, luz mínima", "Livro", "Arco do livro", "Storyvlog"),
-    makeStory("22:10", "B6", "Etapa protocolo 2", "Quarto escuro", "Blackout, protetor", "Escuridão total", "Foto + texto"),
-    makeStory("22:50", "B7", "Ponto final + gancho quinta", "Tela preta", "Escuridão", "Metade da semana. Ponto final. Amanhã: protocolo completo.", "Tela preta + texto"),
-  ],
-  Quinta: [
-    makeStory("06:30", "B1", "S1 — Abertura", "Quarto / janela", "Rosto, silhueta, objetos protocolo", "Prévia do protocolo", "Vídeo falando / Foto"),
-    makeStory("06:30", "B1", "S2 — Gancho protocolo (fixo)", "—", "Céu, rosto, objetos cabeceira", "Hoje à noite: protocolo completo. Fica até o final.", "Vídeo falando / Foto"),
-    makeStory("06:30", "B2", "Hábito matinal 1", "Banheiro / quarto", "Chuveiro, sol, grounding", "Bordão ou porquê", "Vídeo sem fala + texto"),
-    makeStory("06:35", "B2", "Hábito matinal 2", "Quarto / janela", "Água, celular longe, alongamento", "Porquê técnico", "Foto + texto"),
-    makeStory("06:50", "B2", "Rayhan", "Mesa", "Computador", "Produzindo protocolo de hoje", "Storyvlog"),
-    makeStory("10:10", "B2", "Treino", "Academia", "Execução", "Depois de 3h produção, agora o corpo", "Vídeo sem fala + texto"),
-    makeStory("12:00", "B2", "Treino (corrida)", "Ar livre", "Percurso, suado", "O estresse sai pelas pernas + gancho noite", "Vídeo falando"),
-    makeStory("09:30", "B4", "Enquete hábito", "Foto + sticker", "Pós-treino", "Último horário de tela antes de dormir?", "Foto + sticker"),
-    makeStory("12:30", "B3", "Almoço", "Mesa", "Prato forte", "Almoço", "Foto + texto"),
-    makeStory("13:10", "B3", "Nyx Project", "Mesa", "Computador", "Deep work", "Storyvlog"),
-    makeStory("13:30", "B4", "Resposta", "—", "Print", "Dado + contrapopular", "Print + texto"),
-    makeStory("14:30", "B3+B5", "Posicionamento + antecipação", "—", "—", "Posicionamento + hoje à noite protocolo", "Vídeo falando"),
-    makeStory("16:30", "B3", "Janta", "Mesa", "Prato leve", "Última refeição. Leve. Estômago vazio.", "Foto + texto"),
-    makeStory("17:10", "B3", "Leitura 17h", "Ambiente calmo", "Livro", "Primeiro passo do protocolo", "Storyvlog"),
-    makeStory("18:30", "B3", "Faculdade + óculos bloqueadores", "Sala", "Óculos bloqueadores no rosto", "Zero luz azul a partir das 19h", "Foto + texto"),
-    makeStory("19:15", "B6", "Óculos + filtros luz", "Quarto/sala", "Óculos, luzes quentes", "Zero luz azul. Melatonina começa.", "Foto + texto"),
-    makeStory("19:45", "B3", "Diário", "Mesa", "Diário", "Journaling", "Foto + texto"),
-    makeStory("20:30", "B6", "PROTOCOLO COMPLETO — Reflexão", "Quarto, luz quente", "Rosto calmo, 3s silêncio", "Lista completa + 'Parece exagero? Eu durmo 8h.'", "Vídeo falando (25s)"),
-    makeStory("21:00", "B6", "Chá + banana + difusor", "Quarto", "Xícara, banana, difusor", "Triptofano + apigenina + lavanda", "Foto + texto"),
-    makeStory("21:15", "B6", "Leitura noturna", "Quarto preparado", "Livro, quarto gelado, lavanda", "Leitura. Quarto preparado. O corpo sabe.", "Storyvlog"),
-    makeStory("21:50", "B6", "Celular fora + ruído branco", "Quarto", "Celular saindo, app ruído", "Modo avião. Desconexão total.", "Foto + texto"),
-    makeStory("22:00", "B6", "Banho quente + journaling", "Banheiro + mesa", "Vapor, diário", "Banho + esvaziar cabeça", "Foto + texto"),
-    makeStory("22:10", "B6", "Blackout + protetor + 4-7-8", "Quarto escuro", "Blackout, protetor, dilatador", "Escuridão total. Respiração 4-7-8.", "Foto + texto"),
-    makeStory("22:50", "B7", "Ponto final", "Tela preta", "Escuridão", "Protocolo completo. Ponto final.", "Tela preta + texto"),
-  ],
-  Sexta: [
-    makeStory("06:30", "B1", "S1 — Abertura", "Janela / quarto", "Janela, cama, tênis, print", "O protocolo não tira folga", "Foto + texto / Tela preta"),
-    makeStory("06:30", "B1", "S2 — Contexto", "—", "Rosto, água, espelho", "Sexta não é desculpa / a segunda cobra", "Vídeo falando / Foto"),
-    makeStory("06:30", "B2", "Hábito matinal 1", "Banheiro / quarto", "Chuveiro, sol, pés", "Inclusive na sexta", "Vídeo sem fala + texto"),
-    makeStory("06:35", "B2", "Hábito matinal 2", "Quarto / janela", "Água, celular longe, alongamento", "5 dias no mesmo horário", "Foto + texto"),
-    makeStory("06:50", "B2", "Treino (indo)", "Caminho", "Tênis", "5 dias seguidos", "Foto + texto"),
-    makeStory("08:15", "B2", "Treino (pós)", "Academia", "Rosto suado", "O fim de semana não é pra destruir", "Vídeo falando"),
-    makeStory("08:45", "B3", "Faculdade", "Sala", "Caderno", "Contexto", "Foto + texto"),
-    makeStory("09:00", "B4", "Caixinha fim de semana", "Foto + sticker", "—", "O que muda na sua rotina no fim de semana?", "Foto + sticker"),
-    makeStory("10:15", "B3", "Faculdade / Aula 2", "Sala", "Material", "Contexto", "Foto + texto"),
-    makeStory("12:30", "B3", "Almoço", "Mesa", "Prato forte", "Almoço", "Foto + texto"),
-    makeStory("13:10", "B3", "Nyx Project", "Mesa", "Computador", "Último bloco da semana", "Storyvlog"),
-    makeStory("13:30", "B4", "Resposta", "—", "Print", "Jetlag social / contrapopular fim de semana", "Print + texto"),
-    makeStory("14:30", "B3", "Pausa", "Corredor", "Respiração", "Pausa", "Foto + texto"),
-    makeStory("15:00", "B3+B5", "Rayhan + posicionamento", "Mesa", "Computador, caderno", "Produção + posicionamento embutido", "Storyvlog"),
-    makeStory("16:30", "B3", "Janta", "Mesa", "Prato leve", "Última refeição", "Foto + texto"),
-    makeStory("17:10", "B3", "Leitura 17h", "Ambiente calmo", "Livro", "Desaceleração", "Storyvlog"),
-    makeStory("18:00", "B3", "Faculdade noite", "Sala", "Óculos bloqueadores", "Última aula da semana", "Foto + texto"),
-    makeStory("19:45", "B3", "Diário", "Mesa", "Diário", "Journaling", "Foto + texto"),
-    makeStory("20:30", "B6", "Banho quente + reflexão", "Banheiro, luz quente", "Vapor", "Sexta. Mesmo ritual.", "Vídeo falando (calmo)"),
-    makeStory("21:00", "B6", "Etapa protocolo", "Quarto", "Chá, difusor", "O protocolo não tira folga", "Foto + texto"),
-    makeStory("21:30", "B6", "Leitura noturna", "Quarto", "Livro", "Sexta. Mesmo ritual.", "Storyvlog"),
-    makeStory("22:10", "B6", "Etapa protocolo 2", "Quarto escuro", "Blackout", "Escuridão total", "Foto + texto"),
-    makeStory("22:50", "B7", "Ponto final", "Tela preta / celular modo avião", "Modo avião, escuridão", "O protocolo não tira folga. Ponto final.", "Foto + texto"),
-  ],
-  Sábado: [
-    makeStory("06:30", "B1", "S1 — Abertura", "Varanda / janela / rosto", "Rosto, varanda, janela sol", "Mesmo horário fim de semana", "Vídeo falando / Foto"),
-    makeStory("06:30", "B1", "S2 — Contexto", "—", "Ambiente calmo, cama, sol", "Descanso ≠ dormir 12h / jetlag social", "Foto + texto / Vídeo falando"),
-    makeStory("06:30", "B2", "Hábito matinal 1", "Banheiro / quarto", "Chuveiro, sol, grounding", "Sábado também", "Vídeo sem fala + texto"),
-    makeStory("06:35", "B2", "Hábito matinal 2", "Quarto / varanda", "Água, alongamento, respiração", "Sem pressa", "Foto + texto"),
-    makeStory("06:50", "B2", "Treino / atividade livre", "Academia / ar livre", "Tênis, percurso", "Treino ou movimento leve", "Vídeo sem fala + texto"),
-    makeStory("07:30", "B2", "Corrida / movimento", "Ar livre", "Paisagem, rua vazia sábado", "O estresse sai pelas pernas", "Vídeo sem fala + texto"),
-    makeStory("09:30", "B4", "Caixinha pessoal", "Foto + sticker", "Café, livro", "Pergunte qualquer coisa menos sono", "Foto + sticker"),
-    makeStory("12:30", "B3", "Almoço", "Mesa", "Prato", "Almoço", "Foto + texto"),
-    makeStory("13:10", "B3", "Nyx Project", "Mesa", "Computador", "Nyx no sábado", "Storyvlog"),
-    makeStory("13:30", "B4", "Resposta pessoal", "—", "Print", "Resposta leve, lado humano", "Print + texto"),
-    makeStory("14:30", "B3", "Reflexão / Contrapopular", "—", "Tela preta", "Contrapopular descanso", "Tela preta + texto"),
-    makeStory("16:30", "B3", "Janta", "Mesa", "Prato leve", "Última refeição", "Foto + texto"),
-    makeStory("17:30", "B3+B5", "Rayhan + posicionamento", "Mesa", "Computador", "Produção + posicionamento", "Storyvlog"),
-    makeStory("19:00", "B3", "Vulnerabilidade", "—", "Rosto, transição", "Sábado trabalhando. Cansativo. Mas é o que constrói.", "Vídeo falando"),
-    makeStory("20:30", "B6", "Banho quente + reflexão", "Banheiro, luz quente", "Vapor", "Significado do protocolo", "Vídeo falando (calmo)"),
-    makeStory("21:00", "B6", "Leitura noturna", "Quarto", "Livro", "Sem pressa. Sem tela.", "Storyvlog"),
-    makeStory("22:00", "B6", "Etapa protocolo", "Quarto", "Diário, chá, difusor", "Etapa do dia", "Foto + texto"),
-    makeStory("22:50", "B7", "Ponto final", "Quarto escuro", "Escuridão", "Sábado. Mesmo ritual. Ponto final.", "Foto escura + texto"),
-  ],
-  Domingo: [
-    makeStory("06:30", "B1", "S1 — Abertura (foto calma, fixo)", "Janela luz suave / cama / varanda", "Luz suave, cama arrumada, livro", "Sono de hoje define a segunda", "Foto calma (fixo)"),
-    makeStory("06:30", "B1", "S2 — Contexto", "—", "Água, sol, livro", "Preparação / a semana começa hoje", "Foto + texto / Vídeo falando"),
-    makeStory("06:30", "B2", "Hábito matinal 1", "Banheiro / quarto", "Chuveiro, sol, grounding", "7 dias. Semana completa.", "Vídeo sem fala + texto"),
-    makeStory("06:35", "B2", "Hábito matinal 2", "Quarto / varanda", "Água, respiração, celular longe", "O corpo não tira folga", "Foto + texto"),
-    makeStory("07:00", "B2", "Leitura / caminhada leve", "Ambiente calmo / ar livre", "Livro, paisagem", "Sem treino pesado. Descanso ativo.", "Foto + texto"),
-    makeStory("07:30", "B2", "Caminhada / movimento leve", "Ar livre", "Rua calma, paisagem", "Movimento leve. O corpo não fica parado.", "Vídeo sem fala + texto"),
-    makeStory("09:30", "B4", "Caixinha pesquisa conteúdo", "Foto + sticker", "Caderno, café", "Qual tema querem que aprofunde?", "Foto + sticker"),
-    makeStory("12:30", "B3", "Almoço", "Mesa", "Prato", "Almoço de domingo", "Foto + texto"),
-    makeStory("13:00", "B3", "Planejamento semana", "Mesa", "Caderno planejamento", "Os stories nascem aqui", "Foto + texto"),
-    makeStory("13:30", "B4", "Resposta + antecipação", "—", "Print", "Tema mais pedido + 'fechado, essa semana rola'", "Print + texto"),
-    makeStory("14:00", "B3+B5", "Rayhan + posicionamento", "Mesa", "Computador", "Preparando a semana + posicionamento", "Storyvlog"),
-    makeStory("16:30", "B3", "Janta", "Mesa", "Prato leve", "Última refeição", "Foto + texto"),
-    makeStory("17:10", "B3", "Leitura / Rayhan", "Ambiente calmo / mesa", "Livro ou computador", "Leitura ou produção (depende do domingo)", "Storyvlog"),
-    makeStory("20:30", "B6", "Banho quente + reflexão", "Banheiro, luz quente", "Vapor", "O sono mais importante da semana", "Vídeo falando (calmo)"),
-    makeStory("21:00", "B6", "Chá + banana", "Quarto", "Xícara, banana", "Camomila. Domingo. O sono define a segunda.", "Foto + texto"),
-    makeStory("21:30", "B6", "Leitura noturna", "Quarto", "Livro", "Último dia. Mesmo ritual.", "Storyvlog"),
-    makeStory("22:00", "B6", "Journaling", "Quarto", "Diário", "Esvaziar cabeça antes da segunda", "Foto + texto"),
-    makeStory("22:50", "B7", "Ponto final + gancho segunda", "Tela preta", "Escuridão", "O sono de hoje define a segunda. Ponto final. Amanhã começa mais uma semana.", "Tela preta + texto"),
-  ],
+const DATA={
+Segunda:[
+S("06:30","B1","S1 — Abertura","Vídeo falando (fixo)","Quarto, luz baixa","Rosto recém-acordado","Agenda do dia + 'O dia começou ontem.'"),
+S("06:30","B1","S2 — Contexto do dia","Foto + texto","—","Tênis / cama arrumada / celular","'Tudo cabe num dia. Se você dormiu.'"),
+S("06:30","B2","Hábito matinal 1","Vídeo sem fala + texto","Banheiro / quarto","Chuveiro / pés no chão / sol","Bordão: 'Primeiro choque do dia.' ou porquê técnico"),
+S("06:35","B2","Hábito matinal 2","Foto + texto","Quarto / janela","Copo d'água / celular longe / alongamento","Porquê técnico ou consistência"),
+S("06:50","B2","Treino — indo","Foto + texto","Caminho academia, rua","Tênis, mochila, rua escura","'06:45. Treino. Segunda começou.'"),
+S("08:15","B2","Treino — pós","Vídeo falando","Academia","Rosto suado, sem filtro","Conexão treino→sono ou vulnerabilidade"),
+S("08:45","B3","Faculdade","Foto + texto","Sala de aula","Caderno, caneta","Contexto ou aprendizado extraído da aula"),
+S("09:30","B4","Enquete ou Caixinha","Foto + sticker","Foto do momento","Mesa, café, pós-treino","Pergunta: dor ou comportamento da audiência"),
+S("10:10","B2","Rayhan","Storyvlog","Mesa, computador","Tela, caderno, fone","'O que vocês veem na semana sai daqui.'"),
+S("12:30","B3","Almoço","Foto + texto","Mesa","Prato forte","'Refeição forte. Janta leve. Sono agradece.'"),
+S("13:10","B3","Nyx Project","Storyvlog","Mesa trabalho","Computador, caderno, fone","'Deep work. 4h de foco > 10h de distração.'"),
+S("13:30","B4","Resposta caixinha","Print + texto","—","Print da resposta","Dar nome ao problema + solução + CTA"),
+S("14:30","B3","Reflexão / Contrapopular","Tela preta + texto","—","—","'Motivação de segunda não vem de podcast. Vem de sono.'"),
+S("15:00","B5","Posicionamento","Embutido em outro story","—","—","'Pra quem não sabe, eu crio conteúdo sobre sono e produtividade.'"),
+S("15:30","B3","Pausa anti-estresse","Foto + texto","Corredor, ar livre","Mão no peito, passos","'O estresse não acumula se você não deixa.'"),
+S("16:30","B3","Janta","Foto + texto","Mesa","Prato leve","'Última refeição. Depois: só banana e chá.'"),
+S("17:10","B3","Leitura 17h","Storyvlog","Ambiente calmo","Livro aberto, luz tarde","'Leitura. Desaceleração. Primeiro passo do protocolo.'"),
+S("18:30","B3","Faculdade noite","Foto + texto","Sala de aula","Caderno, óculos bloqueadores","'Faculdade de óculos bloqueadores. Zero luz azul.'"),
+S("19:45","B3","Diário","Foto + texto","Mesa","Diário aberto, caneta","'Journaling. Esvaziar a cabeça antes de dormir.'"),
+S("20:15","B3","Aula noite 2","Foto + texto","Sala de aula","Caderno, óculos bloqueadores","Contexto"),
+S("21:15","B6","Banho quente + reflexão","Vídeo falando (calmo)","Banheiro, luz quente","Vapor, luz quente","'A parte mais importante do dia: parar.'"),
+S("22:00","B6","Etapa protocolo","Foto + texto","Quarto preparado","Chá, banana, difusor","Porquê técnico: triptofano, apigenina, lavanda"),
+S("22:15","B6","Etapa protocolo 2","Foto + texto","Quarto escuro","Blackout, protetor, dilatador","'Escuridão total. Cada etapa é um sinal pro cérebro.'"),
+S("22:30","B6","Leitura noturna","Storyvlog","Quarto, luz mínima","Livro, luz quente","'Leitura. O arco do livro: aberto de manhã, fechado de noite.'"),
+S("22:50","B7","Ponto final","Foto escura / tela preta","Quarto escuro","Escuridão, celular modo avião","'Segunda sobrevivida. Ponto final.'"),
+],
+Terça:[
+S("06:30","B1","S1 — Abertura","Foto + texto","Janela / quarto","Janela, pés cama, celular 06:30","'06:30. Terça. Mesmo horário. O dia começou ontem.'"),
+S("06:30","B1","S2 — Contexto","Foto + texto","—","Copo d'água, mesa","'Sem drama. Dormiu bem, acordou bem.'"),
+S("06:30","B2","Hábito matinal 1","Vídeo sem fala + texto","Banheiro / quarto","Chuveiro / sol / grounding","Bordão ou porquê técnico"),
+S("06:35","B2","Hábito matinal 2","Foto + texto","Quarto / janela","Água / celular longe / alongamento","Porquê técnico"),
+S("06:50","B2","Rayhan","Storyvlog","Mesa, computador","Tela, caderno","'Produção de conteúdo antes do treino.'"),
+S("10:10","B2","Treino — indo","Foto + texto","Caminho academia","Tênis, rua","'10:00. 3h de produção rendidas. Agora o corpo.'"),
+S("12:00","B2","Treino — corrida","Vídeo sem fala + texto","Ar livre","Pés, percurso, suado","'Corrida. O estresse sai pelas pernas.'"),
+S("09:30","B4","Caixinha — dor","Foto + sticker","Mesa trabalho","Café, caderno","'O que mais te impede de dormir?'"),
+S("12:30","B3","Almoço","Foto + texto","Mesa","Prato forte","'Almoço forte.'"),
+S("13:10","B3","Nyx Project","Storyvlog","Mesa","Computador, fone","'Deep work.'"),
+S("13:30","B4","Resposta 1","Print + texto","—","Print","Dar nome + solução aplicável"),
+S("14:30","B4","Resposta 2","Print + vídeo falando","—","Print","Aprofundar + posicionamento embutido"),
+S("15:30","B3","Pausa","Foto + texto","Corredor","Respiração, caminhada","'O estresse não acumula se você não deixa.'"),
+S("16:30","B3","Janta","Foto + texto","Mesa","Prato leve","'Última refeição.'"),
+S("17:10","B3","Leitura 17h","Storyvlog","Ambiente calmo","Livro","'Desaceleração.'"),
+S("18:30","B3","Faculdade","Foto + texto","Sala","Caderno, óculos bloqueadores","Contexto"),
+S("19:45","B3","Diário","Foto + texto","Mesa","Diário","'Journaling.'"),
+S("20:30","B6","Banho quente + reflexão","Vídeo falando (calmo)","Banheiro, luz quente","Vapor","'A parte mais importante: parar.'"),
+S("21:00","B6","Etapa protocolo","Foto + texto","Quarto","Chá, difusor, celular fora","Porquê técnico"),
+S("21:30","B6","Leitura noturna","Storyvlog","Quarto, luz mínima","Livro","'Arco do livro.'"),
+S("22:10","B6","Etapa protocolo 2","Foto + texto","Quarto escuro","Blackout, protetor, 4-7-8","'Escuridão total.'"),
+S("22:50","B7","Ponto final","Foto escura + texto","Quarto escuro","Escuridão","'Ponto final. Boa noite.'"),
+],
+Quarta:[
+S("06:30","B1","S1 — Abertura","Foto + texto","Janela / cortina","Janela, cama, livro","'Quarta. Metade da semana. O dia começou ontem.'"),
+S("06:30","B1","S2 — Contexto","Vídeo falando","—","Rosto","'3 noites de protocolo. O acumulado aparece.'"),
+S("06:30","B2","Hábito matinal 1","Vídeo sem fala + texto","Banheiro / quarto","Chuveiro / sol / pés","Bordão ou porquê"),
+S("06:50","B2","Rayhan (curto)","Storyvlog","Mesa","Computador","'45 min de produção. Depois: treino.'"),
+S("07:35","B2","Hábito matinal 2","Foto + texto","Quarto / janela","Água / respiração / alongamento","'Antes do treino.'"),
+S("07:50","B2","Treino","Vídeo sem fala + texto","Academia","Execução, peso","'Terceiro dia seguido.'"),
+S("09:30","B2","Corrida","Vídeo sem fala + texto","Ar livre","Percurso, paisagem","'O estresse sai pelas pernas.'"),
+S("10:15","B3","Aula","Foto + texto","Sala","Caderno","Contexto"),
+S("11:00","B4","Caixinha — opinião","Foto + sticker","Livro, café","Mesa","'Trabalhar mais = produzir mais?'"),
+S("12:30","B3","Almoço","Foto + texto","Mesa","Prato forte","'Refeição forte.'"),
+S("13:10","B3","Nyx Project","Storyvlog","Mesa","Computador","'Deep work.'"),
+S("13:30","B4","Resposta","Print + texto","—","Print","Contrapopular a partir da resposta"),
+S("14:30","B3","Reflexão / Contrapopular","Tela preta + texto","—","—","'Você não tá cansado porque trabalha muito. Tá cansado porque dorme mal.'"),
+S("15:30","B3","Pausa","Foto + texto","Corredor","Respiração","'Pausa.'"),
+S("16:30","B3","Janta","Foto + texto","Mesa","Prato leve","'Última refeição.'"),
+S("17:10","B3","Leitura 17h","Storyvlog","Ambiente calmo","Livro","'Desaceleração.'"),
+S("18:30","B3","Faculdade noite","Foto + texto","Sala","Óculos bloqueadores","Contexto"),
+S("19:45","B3","Diário","Foto + texto","Mesa","Diário","'Journaling.'"),
+S("20:30","B6","Banho quente + reflexão","Vídeo falando (calmo)","Banheiro","Vapor","'O protocolo não é lista. É linguagem corporal.'"),
+S("21:00","B6","Etapa protocolo","Foto + texto","Quarto","Chá, difusor, celular fora","Porquê técnico"),
+S("21:30","B6","Leitura noturna","Storyvlog","Quarto","Livro","'Arco do livro.'"),
+S("22:10","B6","Etapa protocolo 2","Foto + texto","Quarto escuro","Blackout","'Escuridão total.'"),
+S("22:50","B7","Ponto final","Tela preta + texto","—","—","'Metade da semana. Ponto final. Amanhã: protocolo completo.'"),
+],
+Quinta:[
+S("06:30","B1","S1 — Abertura","Vídeo falando / Foto","Quarto / janela","Rosto, silhueta, objetos protocolo","'Dormi 22:30, acordei sem despertador.'"),
+S("06:30","B1","S2 — Gancho protocolo (fixo)","Vídeo falando / Foto","—","Céu, rosto, objetos cabeceira","'Hoje à noite: protocolo completo. Fica até o final.'"),
+S("06:30","B2","Hábito matinal 1","Vídeo sem fala + texto","Banheiro / quarto","Chuveiro / sol / grounding","Bordão ou porquê"),
+S("06:35","B2","Hábito matinal 2","Foto + texto","Quarto / janela","Água / celular longe / alongamento","Porquê técnico"),
+S("06:50","B2","Rayhan","Storyvlog","Mesa","Computador","'Produzindo protocolo de hoje.'"),
+S("10:10","B2","Treino","Vídeo sem fala + texto","Academia","Execução","'Depois de 3h produção, agora o corpo.'"),
+S("12:00","B2","Corrida","Vídeo falando","Ar livre","Suado","'4 dias de treino. O sono sustenta. Hoje vocês vão ver.'"),
+S("09:30","B4","Enquete — hábito","Foto + sticker","Pós-treino","—","'Último horário de tela antes de dormir?'"),
+S("12:30","B3","Almoço","Foto + texto","Mesa","Prato forte","'Almoço.'"),
+S("13:10","B3","Nyx Project","Storyvlog","Mesa","Computador","'Deep work.'"),
+S("13:30","B4","Resposta","Print + texto","—","Print","Dado + contrapopular"),
+S("14:30","B3","Posicionamento + antecipação","Vídeo falando","—","—","Posicionamento + 'hoje à noite protocolo'"),
+S("16:30","B3","Janta","Foto + texto","Mesa","Prato leve","'Última refeição. Leve. Estômago vazio.'"),
+S("17:10","B3","Leitura 17h","Storyvlog","Ambiente calmo","Livro","'Primeiro passo do protocolo.'"),
+S("18:30","B3","Faculdade + óculos","Foto + texto","Sala","Óculos bloqueadores no rosto","'Zero luz azul a partir das 19h.'"),
+S("19:15","B6","Óculos + filtros luz","Foto + texto","Quarto/sala","Óculos, luzes quentes","'19:15. Zero luz azul. Melatonina começa.'"),
+S("19:45","B3","Diário","Foto + texto","Mesa","Diário","'Journaling.'"),
+S("20:30","B6","PROTOCOLO COMPLETO","Vídeo falando (25s)","Quarto, luz quente","Rosto calmo, 3s silêncio","Lista completa + 'Parece exagero? Eu durmo 8h.'"),
+S("21:00","B6","Chá + banana + difusor","Foto + texto","Quarto","Xícara, banana, difusor","'Triptofano + apigenina + lavanda.'"),
+S("21:15","B6","Leitura noturna","Storyvlog","Quarto preparado","Livro, quarto gelado","'Leitura. O corpo sabe.'"),
+S("21:50","B6","Celular fora + ruído branco","Foto + texto","Quarto","Celular saindo, app ruído","'Modo avião. Desconexão total.'"),
+S("22:00","B6","Banho quente + journaling","Foto + texto","Banheiro + mesa","Vapor, diário","'Banho + esvaziar cabeça.'"),
+S("22:10","B6","Blackout + protetor + 4-7-8","Foto + texto","Quarto escuro","Blackout, protetor, dilatador","'Escuridão total. 4-7-8. O corpo desliga.'"),
+S("22:50","B7","Ponto final","Tela preta + texto","—","—","'Protocolo completo. Ponto final.'"),
+],
+Sexta:[
+S("06:30","B1","S1 — Abertura","Foto + texto / Tela preta","Janela / quarto","Janela, cama, tênis","'Sexta. Mesmo horário. O protocolo não tira folga.'"),
+S("06:30","B1","S2 — Contexto","Vídeo falando / Foto","—","Rosto, água, espelho","'A tentação de dormir tarde é real. Mas a segunda cobra.'"),
+S("06:30","B2","Hábito matinal 1","Vídeo sem fala + texto","Banheiro / quarto","Chuveiro / sol / pés","'Inclusive na sexta.'"),
+S("06:35","B2","Hábito matinal 2","Foto + texto","Quarto / janela","Água / celular longe","'5 dias no mesmo horário.'"),
+S("06:50","B2","Treino — indo","Foto + texto","Caminho","Tênis","'5 dias seguidos.'"),
+S("08:15","B2","Treino — pós","Vídeo falando","Academia","Rosto suado","'O fim de semana não é pra destruir.'"),
+S("08:45","B3","Faculdade","Foto + texto","Sala","Caderno","Contexto"),
+S("09:00","B4","Caixinha — fim de semana","Foto + sticker","—","—","'O que muda na sua rotina no fim de semana?'"),
+S("10:15","B3","Aula 2","Foto + texto","Sala","Material","Contexto"),
+S("12:30","B3","Almoço","Foto + texto","Mesa","Prato forte","'Almoço.'"),
+S("13:10","B3","Nyx Project","Storyvlog","Mesa","Computador","'Último bloco da semana.'"),
+S("13:30","B4","Resposta","Print + texto","—","Print","Jetlag social / contrapopular"),
+S("14:30","B3","Pausa","Foto + texto","Corredor","Respiração","'Pausa.'"),
+S("15:00","B3","Rayhan + posicionamento","Storyvlog","Mesa","Computador","Produção + posicionamento embutido"),
+S("16:30","B3","Janta","Foto + texto","Mesa","Prato leve","'Última refeição.'"),
+S("17:10","B3","Leitura 17h","Storyvlog","Ambiente calmo","Livro","'Desaceleração.'"),
+S("18:00","B3","Faculdade noite","Foto + texto","Sala","Óculos bloqueadores","'Última aula da semana.'"),
+S("19:45","B3","Diário","Foto + texto","Mesa","Diário","'Journaling.'"),
+S("20:30","B6","Banho quente + reflexão","Vídeo falando (calmo)","Banheiro","Vapor","'Sexta. Mesmo ritual.'"),
+S("21:00","B6","Etapa protocolo","Foto + texto","Quarto","Chá, difusor","'O protocolo não tira folga.'"),
+S("21:30","B6","Leitura noturna","Storyvlog","Quarto","Livro","'Sexta. Mesmo ritual.'"),
+S("22:10","B6","Etapa protocolo 2","Foto + texto","Quarto escuro","Blackout","'Escuridão total.'"),
+S("22:50","B7","Ponto final","Foto + texto","Quarto / celular modo avião","Modo avião, escuridão","'O protocolo não tira folga. Ponto final.'"),
+],
+Sábado:[
+S("06:30","B1","S1 — Abertura","Vídeo falando / Foto","Varanda / janela / rosto","Rosto, varanda, sol","'Sábado. A maioria vai acordar meio-dia. Eu já tô de pé.'"),
+S("06:30","B1","S2 — Contexto","Foto + texto / Vídeo","—","Ambiente calmo, cama, sol","'Descanso não é dormir 12h.'"),
+S("06:30","B2","Hábito matinal 1","Vídeo sem fala + texto","Banheiro / quarto","Chuveiro / sol / grounding","'Sábado também.'"),
+S("06:35","B2","Hábito matinal 2","Foto + texto","Quarto / varanda","Água / alongamento / respiração","'Sem pressa.'"),
+S("06:50","B2","Treino / atividade","Vídeo sem fala + texto","Academia / ar livre","Tênis, percurso","Treino ou movimento leve"),
+S("07:30","B2","Corrida","Vídeo sem fala + texto","Ar livre","Paisagem, rua vazia","'O estresse sai pelas pernas.'"),
+S("09:30","B4","Caixinha — pessoal","Foto + sticker","Café, livro","—","'Pergunte qualquer coisa menos sono.'"),
+S("12:30","B3","Almoço","Foto + texto","Mesa","Prato","'Almoço.'"),
+S("13:10","B3","Nyx Project","Storyvlog","Mesa","Computador","'Nyx no sábado.'"),
+S("13:30","B4","Resposta pessoal","Print + texto","—","Print","Resposta leve, lado humano"),
+S("14:30","B3","Reflexão / Contrapopular","Tela preta + texto","—","—","'Sofá + celular + série não é descanso. É estímulo.'"),
+S("16:30","B3","Janta","Foto + texto","Mesa","Prato leve","'Última refeição.'"),
+S("17:30","B3","Rayhan + posicionamento","Storyvlog","Mesa","Computador","Produção + posicionamento"),
+S("19:00","B3","Vulnerabilidade","Vídeo falando","—","Rosto","'Sábado trabalhando. Cansativo. Mas é o que constrói.'"),
+S("20:30","B6","Banho quente + reflexão","Vídeo falando (calmo)","Banheiro","Vapor","'O protocolo não é lista. É linguagem corporal.'"),
+S("21:00","B6","Leitura noturna","Storyvlog","Quarto","Livro","'Sem pressa. Sem tela.'"),
+S("22:00","B6","Etapa protocolo","Foto + texto","Quarto","Diário, chá, difusor","Etapa do dia"),
+S("22:50","B7","Ponto final","Foto escura + texto","Quarto escuro","Escuridão","'Sábado. Mesmo ritual. Ponto final.'"),
+],
+Domingo:[
+S("06:30","B1","S1 — Abertura (foto calma)","Foto calma (fixo)","Janela luz suave / cama / varanda","Luz suave, cama arrumada, livro","'Domingo. O sono de hoje define a segunda.'"),
+S("06:30","B1","S2 — Contexto","Foto + texto / Vídeo falando","—","Água, sol, livro","'A semana que vem começa hoje.'"),
+S("06:30","B2","Hábito matinal 1","Vídeo sem fala + texto","Banheiro / quarto","Chuveiro / sol / grounding","'7 dias. Semana completa.'"),
+S("06:35","B2","Hábito matinal 2","Foto + texto","Quarto / varanda","Água / respiração / celular longe","'O corpo não tira folga.'"),
+S("07:00","B2","Leitura / caminhada","Foto + texto","Ambiente calmo / ar livre","Livro, paisagem","'Sem treino pesado. Descanso ativo.'"),
+S("07:30","B2","Caminhada leve","Vídeo sem fala + texto","Ar livre","Rua calma, paisagem","'Movimento leve. O corpo não fica parado.'"),
+S("09:30","B4","Caixinha — pesquisa","Foto + sticker","Caderno, café","—","'Qual tema querem que aprofunde?'"),
+S("12:30","B3","Almoço","Foto + texto","Mesa","Prato","'Almoço de domingo.'"),
+S("13:00","B3","Planejamento","Foto + texto","Mesa","Caderno planejamento","'Os stories da semana nascem aqui.'"),
+S("13:30","B4","Resposta","Print + texto","—","Print","Tema mais pedido + antecipação"),
+S("14:00","B3","Rayhan + posicionamento","Storyvlog","Mesa","Computador","Produção + posicionamento"),
+S("16:30","B3","Janta","Foto + texto","Mesa","Prato leve","'Última refeição.'"),
+S("17:10","B3","Leitura / Rayhan","Storyvlog","Ambiente calmo / mesa","Livro ou computador","Leitura ou produção"),
+S("20:30","B6","Banho quente + reflexão","Vídeo falando (calmo)","Banheiro","Vapor","'O sono mais importante da semana é o de hoje.'"),
+S("21:00","B6","Chá + banana","Foto + texto","Quarto","Xícara, banana","'Camomila. O sono define a segunda.'"),
+S("21:30","B6","Leitura noturna","Storyvlog","Quarto","Livro","'Último dia. Mesmo ritual.'"),
+S("22:00","B6","Journaling","Foto + texto","Quarto","Diário","'Esvaziar cabeça antes da segunda.'"),
+S("22:50","B7","Ponto final","Tela preta + texto","—","—","'O sono de hoje define a segunda. Ponto final.'"),
+],
 };
 
-function StoryEditor({ story, idx, state, dispatch }) {
-  const block = BLOCK_META[story.block] || BLOCK_META.B3;
-  const key = `${state.selectedDay}-${idx}`;
-  const done = state.completed[key];
-  const edits = state.edits[key] || {};
-  const [open, setOpen] = useState(false);
+const init={day:new Date().getDay()===0?6:new Date().getDay()-1,view:"daily",done:{},edits:{}};
 
-  const val = (field) => edits[field] !== undefined ? edits[field] : story[field];
-  const setVal = (field, value) => dispatch({ type: "EDIT", payload: { key, field, value } });
-
-  return (
-    <div style={{
-      background: done ? "#080f08" : "#0b0b14",
-      border: `1px solid ${done ? "#1a3a1a" : "#16162a"}`,
-      borderLeft: `3px solid ${block.color}`,
-      borderRadius: "10px",
-      marginBottom: "6px",
-      transition: "all 0.15s",
-      opacity: done ? 0.55 : 1,
-    }}>
-      <div style={{ padding: "12px 14px", display: "flex", gap: "10px", alignItems: "flex-start" }}>
-        <button onClick={() => dispatch({ type: "TOGGLE", payload: key })}
-          style={{
-            width: "20px", height: "20px", borderRadius: "50%", flexShrink: 0, marginTop: "2px",
-            border: `2px solid ${done ? "#2a7a2a" : block.color}`,
-            background: done ? "#2a7a2a" : "transparent",
-            color: "#fff", fontSize: "10px", cursor: "pointer",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>{done ? "✓" : ""}</button>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8px" }}>
-            <span style={{ color: block.color, fontSize: "9px", fontWeight: 800, letterSpacing: "1.2px", textTransform: "uppercase", fontFamily: "monospace" }}>
-              {block.emoji} {block.name}
-            </span>
-            <span style={{ color: "#333", fontSize: "10px", fontFamily: "monospace" }}>{story.time}</span>
-          </div>
-          <p style={{ color: done ? "#444" : "#ddd", fontSize: "13px", margin: "4px 0 0", lineHeight: 1.4, textDecoration: done ? "line-through" : "none" }}>
-            {story.desc}
-          </p>
-          <button onClick={() => setOpen(!open)}
-            style={{ marginTop: "8px", background: "#0e0e1c", border: "1px solid #1c1c30", color: open ? block.color : "#555", borderRadius: "6px", padding: "4px 10px", fontSize: "10px", cursor: "pointer", fontFamily: "monospace", fontWeight: 600 }}>
-            {open ? "▾ Fechar" : "▸ Editar"}
-          </button>
-        </div>
-      </div>
-
-      {open && (
-        <div style={{ padding: "0 14px 14px 46px", display: "flex", flexDirection: "column", gap: "8px" }}>
-          {[
-            { label: "FORMATO", field: "formato", placeholder: "Ex: Foto + texto, Vídeo falando..." },
-            { label: "CENÁRIO", field: "cenario", placeholder: "Ex: Quarto luz baixa, academia, ar livre..." },
-            { label: "ELEMENTOS", field: "elementos", placeholder: "Ex: Copo d'água, tênis, livro..." },
-            { label: "FALA / TEXTO", field: "fala", placeholder: "O que falar ou escrever na tela..." },
-          ].map(f => (
-            <div key={f.field}>
-              <label style={{ color: "#444", fontSize: "9px", fontWeight: 700, letterSpacing: "1px", fontFamily: "monospace", display: "block", marginBottom: "3px" }}>
-                {f.label}
-              </label>
-              <textarea value={val(f.field)} onChange={e => setVal(f.field, e.target.value)}
-                placeholder={f.placeholder}
-                rows={f.field === "fala" ? 3 : 1}
-                style={{
-                  width: "100%", background: "#08080f", border: "1px solid #1a1a2e", color: "#bbb",
-                  borderRadius: "6px", padding: "8px 10px", fontSize: "12px", fontFamily: "monospace",
-                  resize: "vertical", outline: "none", boxSizing: "border-box",
-                  lineHeight: 1.4,
-                }} />
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+function red(s,a){
+  switch(a.type){
+    case"DAY":return{...s,day:a.v};
+    case"VIEW":return{...s,view:a.v};
+    case"DONE":return{...s,done:{...s.done,[a.v]:!s.done[a.v]}};
+    case"EDIT":{const{k,f,v}=a;return{...s,edits:{...s.edits,[k]:{...(s.edits[k]||{}),[f]:v}}};}
+    default:return s;
+  }
 }
 
-function DailyView({ state, dispatch }) {
-  const day = DAYS[state.selectedDay];
-  const stories = SCHEDULE[day] || [];
-  const total = stories.length;
-  const doneCount = stories.filter((_, i) => state.completed[`${state.selectedDay}-${i}`]).length;
+function Card({s,i,st,dp}){
+  const b=BM[s.b];
+  const k=`${st.day}-${i}`;
+  const dn=st.done[k];
+  const ed=st.edits[k]||{};
+  const v=(f)=>ed[f]!==undefined?ed[f]:s[f];
+  const [open,setOpen]=useState(false);
 
-  const ANGLES = {
-    Segunda: "Peso + contraste com sono",
-    Terça: "Consistência silenciosa",
-    Quarta: "Metade da semana, acumulado",
-    Quinta: "Prévia do protocolo · DIA DO PROTOCOLO COMPLETO",
-    Sexta: "O protocolo não tira folga",
-    Sábado: "Mesmo horário no fim de semana",
-    Domingo: "Sono de hoje define a segunda",
-  };
-
-  const FIXED = {
-    Segunda: "S1: Vídeo falando",
-    Quinta: "S2: Gancho protocolo",
-    Domingo: "S1: Foto calma",
-  };
-
-  return (
-    <div>
-      <div style={{ display: "flex", gap: "3px", padding: "10px 12px", overflowX: "auto" }}>
-        {DAYS.map((d, i) => (
-          <button key={d} onClick={() => dispatch({ type: "SET_DAY", payload: i })}
-            style={{
-              flex: "0 0 auto", padding: "7px 13px",
-              background: state.selectedDay === i ? "#e94560" : "#0e0e1c",
-              color: state.selectedDay === i ? "#fff" : "#444",
-              border: "none", borderRadius: "16px", fontSize: "11px", fontWeight: 700,
-              cursor: "pointer", fontFamily: "monospace",
-            }}>{d.slice(0, 3)}</button>
-        ))}
-      </div>
-
-      <div style={{ padding: "4px 12px 8px" }}>
-        <div style={{ background: "#0b0b14", border: "1px solid #16162a", borderRadius: "12px", padding: "14px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              <h2 style={{ color: "#fff", fontSize: "18px", margin: 0, fontFamily: "'Space Mono', monospace", fontWeight: 800 }}>{day}</h2>
-              <p style={{ color: "#e94560", fontSize: "11px", margin: "4px 0 0", fontFamily: "monospace", fontWeight: 600 }}>
-                ◈ {ANGLES[day]}
-              </p>
-            </div>
-            <span style={{ color: doneCount === total ? "#2a7a2a" : "#e94560", fontSize: "13px", fontFamily: "monospace", fontWeight: 800 }}>
-              {doneCount}/{total}
-            </span>
+  return(
+    <div style={{
+      background:dn?"#060d06":"#09090f",
+      border:`1px solid ${dn?"#1a3a1a":"#141425"}`,
+      borderLeft:`3px solid ${b.c}`,
+      borderRadius:"10px",
+      marginBottom:"6px",
+      opacity:dn?0.45:1,
+      transition:"all 0.15s",
+    }}>
+      <div style={{padding:"10px 12px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
+        <button onClick={()=>dp({type:"DONE",v:k})} style={{
+          width:"18px",height:"18px",borderRadius:"50%",flexShrink:0,marginTop:"1px",
+          border:`2px solid ${dn?"#2a7a2a":b.c}`,background:dn?"#2a7a2a":"transparent",
+          color:"#fff",fontSize:"9px",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",
+        }}>{dn?"✓":""}</button>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <span style={{color:b.c,fontSize:"8px",fontWeight:800,letterSpacing:"1.5px",fontFamily:"monospace"}}>{b.e} {b.n}</span>
+            <span style={{color:"#2a2a3a",fontSize:"10px",fontFamily:"monospace",fontWeight:700}}>{s.t}</span>
           </div>
-          {FIXED[day] && (
-            <div style={{ marginTop: "8px" }}>
-              <span style={{ background: "#1a0a1e", color: "#e94560", padding: "3px 10px", borderRadius: "12px", fontSize: "9px", fontFamily: "monospace", fontWeight: 700 }}>
-                🔒 {FIXED[day]}
-              </span>
+          <p style={{color:dn?"#333":"#e8e8f0",fontSize:"13px",margin:"3px 0 0",fontWeight:600,lineHeight:1.3,textDecoration:dn?"line-through":"none"}}>{s.d}</p>
+
+          <div style={{marginTop:"8px",display:"grid",gridTemplateColumns:"1fr 1fr",gap:"4px 8px"}}>
+            <div>
+              <span style={{color:"#3a3a50",fontSize:"8px",fontWeight:700,letterSpacing:"1px",fontFamily:"monospace"}}>FORMATO</span>
+              <p style={{color:dn?"#2a2a2a":"#8888aa",fontSize:"11px",margin:"1px 0 0",lineHeight:1.3}}>{v("fo")}</p>
+            </div>
+            <div>
+              <span style={{color:"#3a3a50",fontSize:"8px",fontWeight:700,letterSpacing:"1px",fontFamily:"monospace"}}>CENÁRIO</span>
+              <p style={{color:dn?"#2a2a2a":"#8888aa",fontSize:"11px",margin:"1px 0 0",lineHeight:1.3}}>{v("ce")}</p>
+            </div>
+            <div>
+              <span style={{color:"#3a3a50",fontSize:"8px",fontWeight:700,letterSpacing:"1px",fontFamily:"monospace"}}>ELEMENTOS</span>
+              <p style={{color:dn?"#2a2a2a":"#8888aa",fontSize:"11px",margin:"1px 0 0",lineHeight:1.3}}>{v("el")}</p>
+            </div>
+            <div style={{gridColumn:"1/3"}}>
+              <span style={{color:"#3a3a50",fontSize:"8px",fontWeight:700,letterSpacing:"1px",fontFamily:"monospace"}}>FALA / TEXTO</span>
+              <p style={{color:dn?"#2a2a2a":"#c0c0d8",fontSize:"11px",margin:"1px 0 0",lineHeight:1.4,fontStyle:"italic"}}>{v("fa")}</p>
+            </div>
+          </div>
+
+          <button onClick={()=>setOpen(!open)} style={{
+            marginTop:"6px",background:"#0c0c18",border:"1px solid #1a1a2e",color:open?b.c:"#3a3a50",
+            borderRadius:"5px",padding:"3px 8px",fontSize:"9px",cursor:"pointer",fontFamily:"monospace",fontWeight:700,
+          }}>{open?"▾ Fechar edição":"✎ Editar"}</button>
+
+          {open&&(
+            <div style={{marginTop:"8px",display:"flex",flexDirection:"column",gap:"6px"}}>
+              {[
+                {l:"FORMATO",f:"fo",p:"Ex: Foto + texto, Vídeo falando..."},
+                {l:"CENÁRIO",f:"ce",p:"Ex: Quarto, academia, ar livre..."},
+                {l:"ELEMENTOS",f:"el",p:"Ex: Copo d'água, tênis, livro..."},
+                {l:"FALA / TEXTO",f:"fa",p:"O que falar ou escrever..."},
+              ].map(x=>(
+                <div key={x.f}>
+                  <label style={{color:"#3a3a50",fontSize:"8px",fontWeight:700,letterSpacing:"1px",fontFamily:"monospace",display:"block",marginBottom:"2px"}}>{x.l}</label>
+                  <textarea value={v(x.f)} onChange={e=>dp({type:"EDIT",k,f:x.f,v:e.target.value})}
+                    placeholder={x.p} rows={x.f==="fa"?2:1}
+                    style={{
+                      width:"100%",background:"#06060c",border:"1px solid #1a1a2e",color:"#aaa",
+                      borderRadius:"5px",padding:"6px 8px",fontSize:"11px",fontFamily:"monospace",
+                      resize:"vertical",outline:"none",boxSizing:"border-box",lineHeight:1.3,
+                    }}/>
+                </div>
+              ))}
             </div>
           )}
-          <div style={{ marginTop: "10px", height: "3px", background: "#111", borderRadius: "2px", overflow: "hidden" }}>
-            <div style={{ width: `${(doneCount / total) * 100}%`, height: "100%", background: doneCount === total ? "#2a7a2a" : "#e94560", transition: "width 0.3s", borderRadius: "2px" }} />
-          </div>
         </div>
-      </div>
-
-      <div style={{ padding: "0 12px 80px" }}>
-        {stories.map((s, i) => <StoryEditor key={`${state.selectedDay}-${i}`} story={s} idx={i} state={state} dispatch={dispatch} />)}
       </div>
     </div>
   );
 }
 
-function BlocksView({ state, dispatch }) {
-  const [openBlock, setOpenBlock] = useState(null);
+function Daily({st,dp}){
+  const day=DAYS[st.day];
+  const stories=DATA[day]||[];
+  const total=stories.length;
+  const dc=stories.filter((_,i)=>st.done[`${st.day}-${i}`]).length;
+  const ANG={Segunda:"Peso + contraste com sono",Terça:"Consistência silenciosa",Quarta:"Metade da semana · Acumulado",Quinta:"DIA DO PROTOCOLO COMPLETO",Sexta:"O protocolo não tira folga",Sábado:"Mesmo horário no fim de semana",Domingo:"Sono de hoje define a segunda"};
+  const FIX={Segunda:"🔒 S1: Vídeo falando",Quinta:"🔒 S2: Gancho protocolo",Domingo:"🔒 S1: Foto calma"};
 
-  if (openBlock) {
-    const block = BLOCK_META[openBlock];
-    return (
-      <div style={{ padding: "12px", paddingBottom: "80px" }}>
-        <button onClick={() => setOpenBlock(null)}
-          style={{ background: "none", border: "1px solid #222", color: "#666", borderRadius: "8px", padding: "6px 14px", cursor: "pointer", fontSize: "11px", fontFamily: "monospace", marginBottom: "12px" }}>
-          ← Voltar
-        </button>
-        <div style={{ background: "#0b0b14", border: `1px solid ${block.color}44`, borderLeft: `4px solid ${block.color}`, borderRadius: "12px", padding: "16px", marginBottom: "14px" }}>
-          <span style={{ fontSize: "20px" }}>{block.emoji}</span>
-          <h2 style={{ color: "#fff", fontSize: "18px", margin: "6px 0 0", fontFamily: "'Space Mono', monospace" }}>{block.name}</h2>
+  return(
+    <div>
+      <div style={{display:"flex",gap:"3px",padding:"8px 10px",overflowX:"auto"}}>
+        {DAYS.map((d,i)=>(
+          <button key={d} onClick={()=>dp({type:"DAY",v:i})} style={{
+            flex:"0 0 auto",padding:"6px 12px",
+            background:st.day===i?"#e94560":"#0c0c18",
+            color:st.day===i?"#fff":"#3a3a3a",
+            border:"none",borderRadius:"14px",fontSize:"11px",fontWeight:700,cursor:"pointer",fontFamily:"monospace",
+          }}>{d.slice(0,3)}</button>
+        ))}
+      </div>
+      <div style={{padding:"2px 10px 6px"}}>
+        <div style={{background:"#09090f",border:"1px solid #141425",borderRadius:"10px",padding:"12px"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+            <div>
+              <h2 style={{color:"#fff",fontSize:"17px",margin:0,fontFamily:"'Space Mono',monospace",fontWeight:800}}>{day}</h2>
+              <p style={{color:"#e94560",fontSize:"10px",margin:"3px 0 0",fontFamily:"monospace",fontWeight:700}}>◈ {ANG[day]}</p>
+              {FIX[day]&&<p style={{color:"#6a0572",fontSize:"9px",margin:"4px 0 0",fontFamily:"monospace",fontWeight:700}}>{FIX[day]}</p>}
+            </div>
+            <span style={{color:dc===total?"#2a7a2a":"#e94560",fontSize:"12px",fontFamily:"monospace",fontWeight:800}}>{dc}/{total}</span>
+          </div>
+          <div style={{marginTop:"8px",height:"3px",background:"#0c0c0c",borderRadius:"2px",overflow:"hidden"}}>
+            <div style={{width:`${(dc/total)*100}%`,height:"100%",background:dc===total?"#2a7a2a":"#e94560",transition:"width 0.3s",borderRadius:"2px"}}/>
+          </div>
         </div>
-        {DAYS.map(day => {
-          const items = (SCHEDULE[day] || []).filter(s => s.block === openBlock || s.block.startsWith(openBlock));
-          if (!items.length) return null;
-          return (
-            <div key={day} style={{ marginBottom: "14px" }}>
-              <h3 style={{ color: block.color, fontSize: "11px", fontFamily: "monospace", fontWeight: 800, letterSpacing: "1.5px", marginBottom: "6px" }}>
-                {day.toUpperCase()}
-              </h3>
-              {items.map((s, i) => (
-                <div key={i} style={{ background: "#0b0b14", border: "1px solid #16162a", borderRadius: "8px", padding: "10px 12px", marginBottom: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-                    <span style={{ color: "#ccc", fontSize: "12px" }}>{s.desc}</span>
-                    <span style={{ color: "#333", fontSize: "10px", fontFamily: "monospace" }}>{s.time}</span>
+      </div>
+      <div style={{padding:"0 10px 80px"}}>
+        {stories.map((s,i)=><Card key={`${st.day}-${i}`} s={s} i={i} st={st} dp={dp}/>)}
+      </div>
+    </div>
+  );
+}
+
+function Blocks({st,dp}){
+  const[ob,setOb]=useState(null);
+  if(ob){
+    const bl=BM[ob];
+    return(
+      <div style={{padding:"10px",paddingBottom:"80px"}}>
+        <button onClick={()=>setOb(null)} style={{background:"none",border:"1px solid #1a1a2e",color:"#555",borderRadius:"6px",padding:"5px 12px",cursor:"pointer",fontSize:"10px",fontFamily:"monospace",marginBottom:"10px"}}>← Voltar</button>
+        <div style={{background:"#09090f",border:`1px solid ${bl.c}33`,borderLeft:`4px solid ${bl.c}`,borderRadius:"10px",padding:"14px",marginBottom:"12px"}}>
+          <span style={{fontSize:"18px"}}>{bl.e}</span>
+          <h2 style={{color:"#fff",fontSize:"17px",margin:"4px 0 0",fontFamily:"'Space Mono',monospace"}}>{bl.n}</h2>
+        </div>
+        {DAYS.map(day=>{
+          const items=(DATA[day]||[]).filter(s=>s.b===ob);
+          if(!items.length)return null;
+          return(
+            <div key={day} style={{marginBottom:"12px"}}>
+              <h3 style={{color:bl.c,fontSize:"10px",fontFamily:"monospace",fontWeight:800,letterSpacing:"1.5px",marginBottom:"5px"}}>{day.toUpperCase()}</h3>
+              {items.map((s,i)=>(
+                <div key={i} style={{background:"#09090f",border:"1px solid #141425",borderRadius:"7px",padding:"8px 10px",marginBottom:"3px"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:"3px"}}>
+                    <span style={{color:"#ccc",fontSize:"11px",fontWeight:600}}>{s.d}</span>
+                    <span style={{color:"#2a2a3a",fontSize:"9px",fontFamily:"monospace"}}>{s.t}</span>
                   </div>
-                  <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-                    <span style={{ color: "#555", fontSize: "10px", fontFamily: "monospace" }}>📷 {s.formato}</span>
-                    <span style={{ color: "#555", fontSize: "10px", fontFamily: "monospace" }}>🎬 {s.cenario}</span>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"2px 6px"}}>
+                    <span style={{color:"#555",fontSize:"9px",fontFamily:"monospace"}}>📷 {s.fo}</span>
+                    <span style={{color:"#555",fontSize:"9px",fontFamily:"monospace"}}>📍 {s.ce}</span>
+                    <span style={{color:"#555",fontSize:"9px",fontFamily:"monospace"}}>✦ {s.el}</span>
                   </div>
+                  <p style={{color:"#777",fontSize:"9px",fontFamily:"monospace",fontStyle:"italic",margin:"3px 0 0"}}>{s.fa}</p>
                 </div>
               ))}
             </div>
@@ -372,26 +380,23 @@ function BlocksView({ state, dispatch }) {
       </div>
     );
   }
-
-  return (
-    <div style={{ padding: "12px", paddingBottom: "80px" }}>
-      <h2 style={{ color: "#fff", fontSize: "16px", fontFamily: "'Space Mono', monospace", marginBottom: "12px" }}>7 Blocos</h2>
-      {Object.entries(BLOCK_META).map(([id, b]) => {
-        let count = 0;
-        DAYS.forEach(day => { count += (SCHEDULE[day] || []).filter(s => s.block === id || s.block.startsWith(id)).length; });
-        return (
-          <button key={id} onClick={() => setOpenBlock(id)}
-            style={{
-              width: "100%", display: "flex", alignItems: "center", gap: "12px",
-              background: "#0b0b14", border: `1px solid ${b.color}22`, borderLeft: `3px solid ${b.color}`,
-              borderRadius: "10px", padding: "14px", marginBottom: "6px", cursor: "pointer", textAlign: "left",
-            }}>
-            <span style={{ fontSize: "22px" }}>{b.emoji}</span>
-            <div style={{ flex: 1 }}>
-              <h3 style={{ color: "#fff", fontSize: "14px", margin: 0, fontFamily: "'Space Mono', monospace" }}>{b.name}</h3>
-              <span style={{ color: "#444", fontSize: "10px", fontFamily: "monospace" }}>{count} stories/semana</span>
+  return(
+    <div style={{padding:"10px",paddingBottom:"80px"}}>
+      <h2 style={{color:"#fff",fontSize:"15px",fontFamily:"'Space Mono',monospace",marginBottom:"10px"}}>7 Blocos</h2>
+      {Object.entries(BM).map(([id,b])=>{
+        let c=0;DAYS.forEach(d=>{c+=(DATA[d]||[]).filter(s=>s.b===id).length;});
+        return(
+          <button key={id} onClick={()=>setOb(id)} style={{
+            width:"100%",display:"flex",alignItems:"center",gap:"10px",
+            background:"#09090f",border:`1px solid ${b.c}22`,borderLeft:`3px solid ${b.c}`,
+            borderRadius:"8px",padding:"12px",marginBottom:"5px",cursor:"pointer",textAlign:"left",
+          }}>
+            <span style={{fontSize:"18px"}}>{b.e}</span>
+            <div style={{flex:1}}>
+              <h3 style={{color:"#fff",fontSize:"13px",margin:0,fontFamily:"'Space Mono',monospace"}}>{b.n}</h3>
+              <span style={{color:"#333",fontSize:"9px",fontFamily:"monospace"}}>{c} stories/semana</span>
             </div>
-            <span style={{ color: "#333", fontSize: "16px" }}>→</span>
+            <span style={{color:"#222",fontSize:"14px"}}>→</span>
           </button>
         );
       })}
@@ -399,49 +404,33 @@ function BlocksView({ state, dispatch }) {
   );
 }
 
-const init = { selectedDay: new Date().getDay() === 0 ? 6 : new Date().getDay() - 1, view: "daily", completed: {}, edits: {} };
-
-function appReducer(state, action) {
-  switch (action.type) {
-    case "SET_DAY": return { ...state, selectedDay: action.payload };
-    case "SET_VIEW": return { ...state, view: action.payload };
-    case "TOGGLE": return { ...state, completed: { ...state.completed, [action.payload]: !state.completed[action.payload] } };
-    case "EDIT": {
-      const { key, field, value } = action.payload;
-      return { ...state, edits: { ...state.edits, [key]: { ...(state.edits[key] || {}), [field]: value } } };
-    }
-    default: return state;
-  }
-}
-
-export default function App() {
-  const [state, dispatch] = useReducer(appReducer, init);
-
-  return (
-    <div style={{ background: "#060609", minHeight: "100vh", maxWidth: "520px", margin: "0 auto", fontFamily: "system-ui, -apple-system, sans-serif" }}>
-      <div style={{ padding: "16px 12px 6px", display: "flex", alignItems: "center", gap: "10px" }}>
-        <div style={{ width: "32px", height: "32px", background: "#e94560", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px", fontWeight: 900, color: "#fff", fontFamily: "monospace" }}>R</div>
+function App(){
+  const[st,dp]=useReducer(red,init);
+  return(
+    <div style={{background:"#050508",minHeight:"100vh",maxWidth:"520px",margin:"0 auto",fontFamily:"system-ui,-apple-system,sans-serif"}}>
+      <div style={{padding:"14px 10px 4px",display:"flex",alignItems:"center",gap:"8px"}}>
+        <div style={{width:"28px",height:"28px",background:"#e94560",borderRadius:"7px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"12px",fontWeight:900,color:"#fff",fontFamily:"monospace"}}>R</div>
         <div>
-          <h1 style={{ color: "#fff", fontSize: "15px", margin: 0, fontFamily: "'Space Mono', monospace", fontWeight: 800 }}>Rayhan Stories</h1>
-          <p style={{ color: "#333", fontSize: "9px", margin: 0, fontFamily: "monospace", letterSpacing: "1.5px" }}>CONTROLE DE STORIES</p>
+          <h1 style={{color:"#fff",fontSize:"14px",margin:0,fontFamily:"'Space Mono',monospace",fontWeight:800}}>Rayhan Stories</h1>
+          <p style={{color:"#2a2a2a",fontSize:"8px",margin:0,fontFamily:"monospace",letterSpacing:"2px"}}>CONTROLE DE STORIES</p>
         </div>
       </div>
-
-      <nav style={{ display: "flex", gap: "4px", padding: "8px 12px", position: "sticky", top: 0, background: "#060609", zIndex: 50 }}>
-        {[{ id: "daily", label: "Dia", icon: "◉" }, { id: "blocks", label: "Blocos", icon: "▦" }].map(v => (
-          <button key={v.id} onClick={() => dispatch({ type: "SET_VIEW", payload: v.id })}
-            style={{
-              flex: 1, padding: "10px", background: state.view === v.id ? "#e94560" : "#0e0e1c",
-              color: state.view === v.id ? "#fff" : "#444", border: "none", borderRadius: "8px",
-              fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "monospace",
-            }}>
-            {v.icon} {v.label}
-          </button>
+      <nav style={{display:"flex",gap:"4px",padding:"6px 10px",position:"sticky",top:0,background:"#050508",zIndex:50}}>
+        {[{id:"daily",l:"◉ Dia"},{id:"blocks",l:"▦ Blocos"}].map(v=>(
+          <button key={v.id} onClick={()=>dp({type:"VIEW",v:v.id})} style={{
+            flex:1,padding:"9px",background:st.view===v.id?"#e94560":"#0c0c18",
+            color:st.view===v.id?"#fff":"#3a3a3a",border:"none",borderRadius:"7px",
+            fontSize:"11px",fontWeight:700,cursor:"pointer",fontFamily:"monospace",
+          }}>{v.l}</button>
         ))}
       </nav>
-
-      {state.view === "daily" && <DailyView state={state} dispatch={dispatch} />}
-      {state.view === "blocks" && <BlocksView state={state} dispatch={dispatch} />}
+      {st.view==="daily"&&<Daily st={st} dp={dp}/>}
+      {st.view==="blocks"&&<Blocks st={st} dp={dp}/>}
     </div>
   );
 }
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body>
+</html>
