@@ -31,111 +31,111 @@ var BM={};BLOCKS.forEach(function(b){BM[b.id]=b});
 function mk(t,b,d,fo,ce,el,fa){return{t:t||"",b:b||"B3",d:d||"",fo:fo||"",ce:ce||"",el:el||"",fa:fa||""}}
 
 var TARDE_SEMANA=[
-mk("12:30","B3","Almoco","Foto + texto","Mesa","Prato forte","Refeicao forte. Janta leve. Sono agradece."),
-mk("13:10","B3","Nyx Project","Storyvlog","Mesa trabalho","Computador, fone","Deep work. 4h de foco > 10h de distracao."),
-mk("13:30","B4","Resposta caixinha","Print + texto","--","Print da resposta","Dar nome ao problema + solucao + CTA"),
-mk("14:30","B3","Reflexao / Contrapopular","Tela preta + texto","--","--","Contrapopular do banco"),
-mk("15:00","B5","Posicionamento","Embutido em outro story","--","--","Frase de posicionamento"),
-mk("15:30","B3","Pausa anti-estresse","Foto + texto","Corredor, ar livre","Mao no peito, passos","O estresse nao acumula se voce nao deixa."),
-mk("16:30","B3","Janta","Foto + texto","Mesa","Prato leve","Ultima refeicao. Depois: so banana e cha."),
-mk("17:10","B3","Leitura 17h","Storyvlog","Ambiente calmo","Livro aberto, luz tarde","Leitura. Desaceleracao. Primeiro passo do protocolo."),
-mk("18:30","B3","Aula","Foto + texto","Sala de aula","Caderno, oculos bloqueadores","Faculdade de oculos bloqueadores. Zero luz azul."),
-mk("19:45","B3","Diario","Foto + texto","Mesa","Diario aberto, caneta","Journaling. Esvaziar a cabeca."),
-mk("20:30","B6","Banho quente + reflexao","Video falando (calmo)","Banheiro, luz quente","Vapor, luz quente","A parte mais importante do dia: parar."),
-mk("21:00","B6","Etapa protocolo","Foto + texto","Quarto preparado","Cha, banana, difusor","Porque tecnico: triptofano, apigenina, lavanda"),
-mk("21:15","B6","Etapa protocolo 2","Foto + texto","Quarto escuro","Blackout, protetor, dilatador","Escuridao total. Cada etapa e um sinal pro cerebro."),
-mk("21:30","B6","Leitura noturna","Storyvlog","Quarto, luz minima","Livro, luz quente","Leitura. Arco do livro."),
-mk("22:50","B7","Ponto final","Foto escura / tela preta","Quarto escuro","Escuridao, celular modo aviao","Ponto final.")
+mk("12:30","B3","Almoco - refeicao principal do dia","Foto + texto","Mesa","Prato forte, bem montado","Mostrar o prato e escrever: 'Refeicao forte agora. Janta leve as 16:30. O sono agradece quem nao come pesado a noite.'"),
+mk("13:10","B3","Nyx Project - bloco de trabalho focado","Storyvlog","Mesa trabalho","Computador, fone de ouvido, caderno","Filmar de terceira pessoa voce trabalhando. Texto ou fala: 'Deep work. 4 horas de foco valem mais que 10 de distracao.'"),
+mk("13:30","B4","Resposta da caixinha/enquete da manha","Print + texto","--","Print da melhor resposta da audiencia","Mostrar o print da resposta. Dar nome ao problema (ex: ruminacao, jetlag social). Oferecer uma solucao pratica. Fechar com CTA: 'Testa e me conta.'"),
+mk("14:30","B3","Reflexao ou contrapopular do dia","Tela preta + texto","--","--","Escolher um contrapopular do banco. Exemplo: 'Voce nao ta cansado porque trabalha muito. Ta cansado porque dorme mal.' Usar tela preta pra dar peso na frase."),
+mk("15:00","B5","Posicionamento - quem eu sou e o que faco","Embutido em outro story","--","--","Encaixar dentro de outro story uma frase como: 'Pra quem nao sabe, eu crio conteudo sobre sono, estresse e produtividade no corporativo.' Nao precisa ser story separado."),
+mk("15:30","B3","Pausa anti-estresse entre blocos de trabalho","Foto + texto","Corredor, ar livre, caminhando","Mao no peito (respiracao) ou pes caminhando","Mostrar a pausa acontecendo. Texto: 'Pausa a cada hora. 5 min respiracao + 5 min caminhada. O estresse nao acumula se voce nao deixa.'"),
+mk("16:30","B3","Janta - ultima refeicao do dia (leve)","Foto + texto","Mesa","Prato leve, pouca comida","Mostrar o prato leve. Texto: 'Ultima refeicao do dia. Leve. Depois disso so banana e cha de camomila antes de dormir.'"),
+mk("17:10","B3","Leitura das 17h - desaceleracao","Storyvlog","Ambiente calmo, luz de fim de tarde","Livro aberto na mao, cafe ou cha ao lado","Filmar de terceira pessoa voce lendo. Texto ou fala: 'Leitura. O cerebro sai do modo execucao. Primeiro passo do protocolo de sono.'"),
+mk("18:30","B3","Aula na faculdade (noite)","Foto + texto","Sala de aula","Caderno aberto, oculos bloqueadores no rosto","Mostrar que esta na aula DE OCULOS BLOQUEADORES. Texto: 'Faculdade a noite de oculos bloqueadores. A partir das 19h, zero luz azul. O protocolo nao para nem na aula.'"),
+mk("19:45","B3","Diario - journaling entre atividades","Foto + texto","Mesa, ambiente calmo","Diario aberto, caneta na mao","Mostrar o diario. Texto: 'Journaling. Tudo que ficou na cabeca vai pro papel. Se nao sai agora, vira ruminacao a noite.'"),
+mk("20:30","B6","Banho quente + reflexao noturna (inicio protocolo)","Video falando (calmo, 15-20s)","Banheiro com luz quente, vapor","Vapor ao fundo, luz quente/laranja, rosto calmo","Olhar pra camera, 3 segundos de silencio, depois falar em tom calmo: 'Comecando a desacelerar. A parte mais importante do dia: parar.' Pode variar a fala cada dia."),
+mk("21:00","B6","Etapa do protocolo - cha, banana, difusor, celular fora","Foto + texto","Quarto preparado, luz quente","Xicara de cha fumegando, banana, difusor de lavanda ligado","Foto dos objetos do protocolo. Texto: 'Camomila + banana. Triptofano e apigenina - precursores de melatonina. Difusor de lavanda: sistema nervoso desliga.'"),
+mk("21:15","B6","Etapa do protocolo - blackout, protetor, escuridao","Foto + texto","Quarto escuro, blackout fechado","Blackout fechado, protetor auricular, dilatador nasal na cabeceira","Foto do quarto preparado. Texto: 'Escuridao total. Protetor auricular. Dilatador nasal. Cada detalhe e um sinal pro cerebro: pode desligar.'"),
+mk("21:30","B6","Leitura noturna - ultima atividade antes de dormir","Storyvlog","Quarto com luz minima, quase escuro","Livro na mao, luz quente lateral unica","Filmar de terceira pessoa voce lendo no quarto preparado. Texto: 'Leitura noturna. O livro abre de manha e fecha de noite. O arco do dia.'"),
+mk("22:50","B7","PONTO FINAL - fechamento do dia","Foto escura ou tela preta total","Quarto completamente escuro","Escuridao total, celular em modo aviao","Foto do quarto escuro ou tela preta. Texto: '[Dia] + Ponto final.' Exemplo: 'Segunda sobrevivida. Ponto final.' OBRIGATORIO todo dia.")
 ];
 
 var TARDE_FDSEMANA=[
-mk("12:30","B3","Almoco","Foto + texto","Mesa","Prato","Almoco."),
-mk("13:10","B3","Nyx Project","Storyvlog","Mesa","Computador","Nyx no fim de semana."),
-mk("13:30","B4","Resposta caixinha","Print + texto","--","Print","Resposta"),
-mk("14:30","B3","Reflexao / Contrapopular","Tela preta + texto","--","--","Contrapopular"),
-mk("15:30","B3","Pausa","Foto + texto","Corredor","Respiracao","O estresse nao acumula."),
-mk("16:30","B3","Janta","Foto + texto","Mesa","Prato leve","Ultima refeicao."),
-mk("17:10","B3","Leitura","Storyvlog","Ambiente calmo","Livro","Desaceleracao."),
-mk("17:30","B3","Rayhan","Storyvlog","Mesa","Computador","Producao de conteudo + posicionamento"),
-mk("19:00","B3","Vulnerabilidade","Video falando","--","Rosto","Vulnerabilidade pontual do dia"),
-mk("20:30","B6","Banho quente + reflexao","Video falando (calmo)","Banheiro, luz quente","Vapor","A parte mais importante: parar."),
-mk("21:00","B6","Etapa protocolo","Foto + texto","Quarto","Cha, difusor","Porque tecnico"),
-mk("21:30","B6","Leitura noturna","Storyvlog","Quarto","Livro","Arco do livro."),
-mk("22:00","B6","Etapa protocolo 2","Foto + texto","Quarto escuro","Blackout, protetor","Escuridao total."),
-mk("22:50","B7","Ponto final","Foto escura + texto","Quarto escuro","Escuridao","Ponto final.")
+mk("12:30","B3","Almoco de fim de semana","Foto + texto","Mesa","Prato","Mostrar o prato. Texto simples: 'Almoco de [sabado/domingo].'"),
+mk("13:10","B3","Nyx Project - trabalho no fim de semana","Storyvlog","Mesa","Computador","Filmar de terceira pessoa. Texto: 'Nyx no [sabado/domingo]. Construindo enquanto a maioria descansa.'"),
+mk("13:30","B4","Resposta da caixinha/enquete","Print + texto","--","Print da resposta","Mostrar print + responder. Sabado: resposta leve, pessoal, lado humano. Domingo: tema mais pedido + antecipar semana."),
+mk("14:30","B3","Reflexao ou contrapopular do dia","Tela preta + texto","--","--","Contrapopular. Exemplo sabado: 'Sofa + celular + serie nao e descanso. E estimulo. Descanso e leitura, caminhada, grounding.'"),
+mk("15:30","B3","Pausa anti-estresse","Foto + texto","Corredor, ar","Respiracao, caminhada","Mostrar a pausa. Texto: 'O estresse nao acumula se voce nao deixa. Inclusive no fim de semana.'"),
+mk("16:30","B3","Janta - ultima refeicao (leve)","Foto + texto","Mesa","Prato leve","Texto: 'Ultima refeicao. Leve. Depois: so banana e cha.'"),
+mk("17:10","B3","Leitura - desaceleracao","Storyvlog","Ambiente calmo","Livro","Filmar lendo. Texto: 'Desaceleracao. O cerebro precisa de transicao.'"),
+mk("17:30","B3","Rayhan - producao de conteudo","Storyvlog","Mesa","Computador, caderno","Filmar produzindo. Texto: 'Producao de conteudo sobre sono e produtividade. E o que eu faco.' (posicionamento embutido)"),
+mk("19:00","B3","Momento de vulnerabilidade real","Video falando (5-10s)","--","Rosto, sem filtro","Falar algo real sobre o dia. Exemplo: 'Sabado a noite trabalhando. E cansativo. Mas sono, estresse e produtividade - e o que eu construo. O dia tem ponto final.'"),
+mk("20:30","B6","Banho quente + reflexao noturna (inicio protocolo)","Video falando (calmo)","Banheiro, luz quente","Vapor","3s silencio + falar calmo: 'A parte mais importante do dia: parar.' Ou: 'O protocolo nao e lista. E linguagem corporal com voce mesmo.'"),
+mk("21:00","B6","Etapa do protocolo - cha, difusor, celular fora","Foto + texto","Quarto","Cha, difusor ligado","Foto dos objetos. Texto com porque tecnico do dia."),
+mk("21:30","B6","Leitura noturna - ultima atividade","Storyvlog","Quarto, luz minima","Livro","Filmar lendo. Texto: 'Sem pressa. Sem tela. So o livro. O arco do dia.'"),
+mk("22:00","B6","Etapa do protocolo - blackout, protetor, escuridao","Foto + texto","Quarto escuro","Blackout, protetor auricular","Texto: 'Escuridao total. O quarto vira caverna. O cerebro agradece.'"),
+mk("22:50","B7","PONTO FINAL - fechamento do dia","Foto escura + texto","Quarto escuro","Escuridao total","Texto: '[Sabado/Domingo]. Mesmo ritual. Ponto final.'")
 ];
 
 var MANHA={};
 MANHA["Segunda"]=[
-mk("06:30","B1","S1 - Abertura","Video falando (fixo)","Quarto, luz baixa","Rosto recem-acordado","Agenda do dia + O dia comecou ontem."),
-mk("06:30","B1","S2 - Contexto do dia","Foto + texto","--","Tenis / cama arrumada / celular","Tudo cabe num dia. Se voce dormiu."),
-mk("06:30","B2","Habito matinal 1","Video sem fala + texto","Banheiro / quarto","Chuveiro / pes no chao / sol","Bordao: Primeiro choque do dia."),
-mk("06:35","B2","Habito matinal 2","Foto + texto","Quarto / janela","Copo dagua / celular longe","Porque tecnico ou consistencia"),
-mk("06:50","B2","Treino - indo","Foto + texto","Caminho academia","Tenis, mochila","06:45. Treino. Segunda comecou."),
-mk("08:15","B2","Treino - pos","Video falando","Academia","Rosto suado","Conexao treino - sono"),
-mk("08:45","B3","Aula","Foto + texto","Sala de aula","Caderno, caneta","Contexto ou aprendizado"),
-mk("09:30","B4","Enquete ou Caixinha","Foto + sticker","Foto do momento","Mesa, cafe","Pergunta: dor ou comportamento"),
-mk("10:10","B2","Rayhan","Storyvlog","Mesa, computador","Tela, caderno, fone","O que voces veem sai daqui.")
+mk("06:30","B1","Abertura S1 - acordei, horario e sono (FALAR)","Video falando (fixo - segunda sempre fala)","Quarto com luz baixa, recem-acordado","Rosto sem producao, luz natural comecando","Olhar pra camera e falar a agenda do dia: 'Segunda. Treino, faculdade, Nyx, aula a noite. E eu to de boa. 8 horas de sono. O dia comecou ontem.'"),
+mk("06:30","B1","Abertura S2 - contexto do que vem hoje","Foto + texto","--","Tenis na porta / cama arrumada / celular mostrando 06:30","Foto de um objeto que represente o dia. Texto: 'Tudo cabe num dia. Se voce dormiu.' ou 'O protocolo de ontem me garantiu hoje.'"),
+mk("06:30","B2","Habito matinal 1 - escolher da lista (banho gelado, agua, sol, grounding...)","Video sem fala + texto","Banheiro ou quarto","O que estiver fazendo: chuveiro, pes no chao, sol na janela","Filmar o habito acontecendo SEM FALAR. Colocar texto: bordao do habito (ex: 'Primeiro choque do dia.') ou porque tecnico (ex: 'Sol. Melatonina desliga. Cortisol liga.')"),
+mk("06:35","B2","Habito matinal 2 - diferente do primeiro","Foto + texto","Quarto ou janela","Copo dagua / celular longe na mesa / alongamento","Foto do segundo habito. Texto com porque tecnico ou consistencia. Ex: 'Agua. Primeiro gole depois de 8 horas.' ou 'Sem celular. A manha e minha.'"),
+mk("06:50","B2","Indo pro treino - transicao","Foto + texto","Caminho da academia, rua","Tenis, mochila, rua ainda escura","Foto do caminho ou do tenis. Texto: '06:45. Treino. Segunda comecou.' ou 'Academia vazia. So quem dormiu ta aqui.'"),
+mk("08:15","B2","Pos-treino - resultado e conexao com sono","Video falando (5-10s)","Academia ou saida","Rosto suado, sem filtro, real","Falar sobre a conexao treino-sono: 'Treino de manha, cortisol natural. O corpo ja ta acordado sem cafe.' ou vulnerabilidade: 'Corpo destruido, mas melhor sensacao da semana.'"),
+mk("08:45","B3","Aula na faculdade (manha)","Foto + texto","Sala de aula","Caderno aberto, caneta, material","Foto do ambiente da aula. Texto: contexto simples ou aprendizado extraido da aula conectado com sono/produtividade."),
+mk("09:30","B4","Enquete ou Caixinha - abrir conversa com audiencia","Foto do momento + sticker de caixinha ou enquete","Foto de onde voce esta (mesa, cafe, pos-aula)","Mesa, cafe, caderno","Colocar sticker de caixinha com pergunta de dor ou comportamento. Ex: 'Como comecou sua segunda?' (enquete) ou 'O que mais te impede de dormir?' (caixinha)"),
+mk("10:10","B2","Rayhan - producao de conteudo (backstage)","Storyvlog (terceira pessoa, celular apoiado)","Mesa com computador","Tela do computador, caderno de planejamento, fone","Filmar de terceira pessoa voce sentando e comecando a trabalhar. Texto: 'Rayhan. O que voces veem na semana sai daqui.' ou 'Producao de conteudo. O backstage.'")
 ];
 MANHA["Terca"]=[
-mk("06:30","B1","S1 - Abertura","Foto + texto","Janela / quarto","Janela, pes cama","Terca. Mesmo horario. O dia comecou ontem."),
-mk("06:30","B1","S2 - Contexto","Foto + texto","--","Copo dagua","Dormiu bem, acordou bem."),
-mk("06:30","B2","Habito matinal 1","Video sem fala + texto","Banheiro","Chuveiro / sol","Bordao ou porque tecnico"),
-mk("06:35","B2","Habito matinal 2","Foto + texto","Quarto","Agua / celular longe","Porque tecnico"),
-mk("06:50","B2","Rayhan","Storyvlog","Mesa","Tela, caderno","Producao antes do treino."),
-mk("09:30","B4","Caixinha","Foto + sticker","Mesa","Cafe","O que te impede de dormir?"),
-mk("10:10","B2","Treino","Foto + texto","Caminho","Tenis","3h de producao. Agora o corpo."),
-mk("11:30","B2","Corrida","Video sem fala","Ar livre","Pes, percurso","O estresse sai pelas pernas.")
+mk("06:30","B1","Abertura S1 - acordei, consistencia silenciosa","Foto + texto","Janela do quarto ou quarto com luz baixa","Janela, pes saindo da cama, celular mostrando 06:30","Foto calma do momento de acordar. Texto: '06:30. Terca. Mesmo horario. O dia comecou ontem.' ou 'O corpo ja sabe o caminho.'"),
+mk("06:30","B1","Abertura S2 - complemento calmo","Foto + texto","--","Copo dagua na mesa, mesa de trabalho","Foto de outro elemento. Texto: 'Sem drama. Dormiu bem, acordou bem. Simples.' ou 'Consistencia e mais importante que dias extraordinarios.'"),
+mk("06:30","B2","Habito matinal 1 - escolher da lista","Video sem fala + texto","Banheiro ou quarto","Chuveiro (gelado), sol na janela, grounding","Filmar o habito sem falar. Texto: bordao ou porque tecnico."),
+mk("06:35","B2","Habito matinal 2 - diferente do primeiro","Foto + texto","Quarto","Agua, celular longe, alongamento","Foto do habito. Texto com porque tecnico."),
+mk("06:50","B2","Rayhan - producao de conteudo antes do treino","Storyvlog (terceira pessoa)","Mesa com computador","Tela, caderno aberto","Filmar de terceira pessoa. Texto: 'Producao de conteudo antes do treino. 3 horas de foco.' ou falar o que esta produzindo."),
+mk("09:30","B4","Caixinha - pergunta sobre dor da audiencia","Foto + sticker caixinha","Mesa de trabalho","Cafe, caderno","Sticker de caixinha. Pergunta: 'O que mais te impede de dormir?' ou 'Qual o maior ladrao de sono na sua vida?'"),
+mk("10:10","B2","Indo pro treino - transicao trabalho para corpo","Foto + texto","Caminho da academia","Tenis, rua","Texto: '10:00. 3 horas de producao rendidas. Agora o corpo.' ou 'Treinar depois de trabalhar limpa a cabeca.'"),
+mk("11:30","B2","Corrida - anti-estresse","Video sem fala + texto","Ar livre, percurso","Pes no chao, paisagem, suado","Filmar a corrida ou pos-corrida sem falar. Texto: 'Corrida. O estresse sai pelas pernas.' ou 'O estresse nao acumula se voce nao deixa.'")
 ];
 MANHA["Quarta"]=[
-mk("06:30","B1","S1 - Abertura","Foto + texto","Janela","Janela, livro","Metade da semana. O dia comecou ontem."),
-mk("06:30","B1","S2 - Contexto","Video falando","--","Rosto","O acumulado aparece."),
-mk("06:30","B2","Habito matinal 1","Video sem fala","Banheiro","Chuveiro / sol","Bordao"),
-mk("06:50","B2","Rayhan (curto)","Storyvlog","Mesa","Computador","45 min. Depois: treino."),
-mk("07:35","B2","Habito matinal 2","Foto + texto","Quarto","Agua / alongamento","Antes do treino."),
-mk("07:50","B2","Treino","Video sem fala","Academia","Execucao","Terceiro dia seguido."),
-mk("09:30","B2","Corrida","Video sem fala","Ar livre","Percurso","O estresse sai pelas pernas."),
-mk("10:15","B3","Aula","Foto + texto","Sala","Caderno","Contexto"),
-mk("11:00","B4","Caixinha","Foto + sticker","Cafe","Mesa","Trabalhar mais = produzir mais?")
+mk("06:30","B1","Abertura S1 - metade da semana","Foto + texto","Janela do quarto","Janela, livro na cabeceira","Foto da janela ou do quarto. Texto: 'Quarta. Metade da semana. Mesma hora. Mesmo protocolo. O dia comecou ontem.'"),
+mk("06:30","B1","Abertura S2 - acumulado aparece","Video falando (5s)","--","Rosto, energia","Falar olhando pra camera: '3 noites de protocolo. 3 manhas sem despertador. O acumulado aparece.' ou 'Meu corpo nao diferencia segunda de quarta.'"),
+mk("06:30","B2","Habito matinal 1 - escolher da lista","Video sem fala + texto","Banheiro","Chuveiro, sol, pes no chao","Filmar o habito. Texto: bordao ou porque."),
+mk("06:50","B2","Rayhan curto - 45 min de producao","Storyvlog (terceira pessoa)","Mesa","Computador","Filmar rapido. Texto: '45 minutos de producao. Depois: treino. Quarta e dia comprimido.'"),
+mk("07:35","B2","Habito matinal 2 - antes do treino","Foto + texto","Quarto ou janela","Agua, alongamento, respiracao","Foto do habito. Texto: 'Agua e alongamento antes do treino. O corpo precisa.' ou porque tecnico."),
+mk("07:50","B2","Treino - terceiro dia seguido","Video sem fala + texto","Academia","Execucao de exercicio, peso","Filmar treinando. Texto: '07:45. Treino. Terceiro dia seguido. O corpo ta condicionado.'"),
+mk("09:30","B2","Corrida - anti-estresse metade da semana","Video sem fala + texto","Ar livre","Percurso, paisagem","Filmar corrida. Texto: 'Corrida. O estresse sai pelas pernas. Metade da semana limpa.'"),
+mk("10:15","B3","Aula na faculdade","Foto + texto","Sala de aula","Caderno, caneta","Foto. Texto: contexto simples."),
+mk("11:00","B4","Caixinha - pergunta de opiniao/provocacao","Foto + sticker caixinha","Com cafe na mao ou na mesa","Mesa, livro","Sticker caixinha. Pergunta provocativa: 'Voce acha que trabalhar mais = produzir mais?' ou 'Motivacao vem de onde?'")
 ];
 MANHA["Quinta"]=[
-mk("06:30","B1","S1 - Abertura","Video falando","Quarto","Rosto, objetos protocolo","Dormi 22:30, sem despertador."),
-mk("06:30","B1","S2 - Gancho protocolo","Video falando","--","Rosto, objetos cabeceira","Hoje: protocolo completo. Fica ate o final."),
-mk("06:30","B2","Habito matinal 1","Video sem fala","Banheiro","Chuveiro / sol","Bordao"),
-mk("06:35","B2","Habito matinal 2","Foto + texto","Quarto","Agua / celular longe","Porque tecnico"),
-mk("06:50","B2","Rayhan","Storyvlog","Mesa","Computador","Produzindo protocolo."),
-mk("09:30","B4","Enquete","Foto + sticker","Pos-treino","--","Ultimo horario de tela?"),
-mk("10:10","B2","Treino","Video sem fala","Academia","Execucao","Agora o corpo."),
-mk("11:30","B2","Corrida","Video falando","Ar livre","Suado","4 dias. O sono sustenta.")
+mk("06:30","B1","Abertura S1 - previa do protocolo da noite","Video falando (5-10s)","Quarto, janela","Rosto, objetos do protocolo visiveis no quarto","Falar: '06:30. Dormi 22:30, acordei sem despertador. Hoje a noite eu mostro o protocolo inteiro. Fica ate o final.'"),
+mk("06:30","B1","Abertura S2 - gancho forte pro protocolo (FIXO)","Video falando ou Foto + texto","--","Rosto ou objetos na cabeceira (difusor, protetor, livro)","Se video: '4 noites de protocolo, 4 manhas sem alarme. Coincidencia? Hoje eu provo que nao.' Se foto: texto 'Nao e genetica. E protocolo. Hoje voces vao ver como.'"),
+mk("06:30","B2","Habito matinal 1 - escolher da lista","Video sem fala + texto","Banheiro","Chuveiro, sol, grounding","Filmar o habito. Texto: bordao ou porque."),
+mk("06:35","B2","Habito matinal 2 - diferente do primeiro","Foto + texto","Quarto","Agua, celular longe, alongamento","Foto + texto com porque tecnico."),
+mk("06:50","B2","Rayhan - produzindo conteudo do protocolo","Storyvlog (terceira pessoa)","Mesa","Computador","Filmar trabalhando. Texto: 'Produzindo o conteudo do protocolo de hoje. O que voces vao ver a noite sai daqui.'"),
+mk("09:30","B4","Enquete - coletar dados pra usar a noite","Foto + sticker enquete","Pos-treino ou mesa","--","Enquete com opcoes: 'Ultimo horario que olha o celular antes de dormir?' Opcoes: 21h / 22h / 23h / Meia-noite+. Usar o resultado no protocolo da noite."),
+mk("10:10","B2","Treino - depois de 3h de producao","Video sem fala + texto","Academia","Execucao de exercicio","Filmar treinando. Texto: 'Depois de 3 horas de producao, agora o corpo. O treino gasta a energia que o sono vai recuperar.'"),
+mk("11:30","B2","Corrida - conexao com protocolo da noite","Video falando (5s)","Ar livre","Rosto suado","Falar: '4 dias de treino. O sono de ontem sustenta cada um. Hoje a noite voces vao ver como.'")
 ];
 MANHA["Sexta"]=[
-mk("06:30","B1","S1 - Abertura","Foto + texto","Janela","Janela, tenis","Sexta. O protocolo nao tira folga."),
-mk("06:30","B1","S2 - Contexto","Video falando","--","Rosto, agua","A tentacao e real. Mas a segunda cobra."),
-mk("06:30","B2","Habito matinal 1","Video sem fala","Banheiro","Chuveiro / sol","Inclusive na sexta."),
-mk("06:35","B2","Habito matinal 2","Foto + texto","Quarto","Agua / celular longe","5 dias no mesmo horario."),
-mk("06:50","B2","Treino","Foto + texto","Caminho","Tenis","5 dias seguidos."),
-mk("08:15","B2","Treino pos","Video falando","Academia","Rosto suado","Nao e pra destruir."),
-mk("08:45","B3","Aula","Foto + texto","Sala","Caderno","Contexto"),
-mk("09:00","B4","Caixinha","Foto + sticker","--","--","O que muda no fim de semana?"),
-mk("10:15","B3","Aula 2","Foto + texto","Sala","Material","Contexto")
+mk("06:30","B1","Abertura S1 - o protocolo nao tira folga","Foto + texto ou Tela preta","Janela do quarto","Janela, tenis de treino","Texto forte: 'Sexta. 06:30. Mesmo horario. O protocolo nao tira folga.' ou 'A maioria ja ta planejando dormir meia-noite. Eu vou dormir 22:30.'"),
+mk("06:30","B1","Abertura S2 - sexta nao e desculpa","Video falando (5s)","--","Rosto, copo dagua","Falar: 'A tentacao de dormir tarde hoje e real. Mas a segunda ta logo ali. E ela cobra.' ou 'Uma noite mal dormida reseta 5 dias de protocolo. Nao vale.'"),
+mk("06:30","B2","Habito matinal 1 - inclusive na sexta","Video sem fala + texto","Banheiro","Chuveiro, sol","Filmar o habito. Texto: 'Inclusive na sexta. O corpo nao sabe que dia e.'"),
+mk("06:35","B2","Habito matinal 2 - 5 dias de consistencia","Foto + texto","Quarto","Agua, celular longe","Texto: '5 dias no mesmo horario. O fim de semana nao vai quebrar isso.'"),
+mk("06:50","B2","Treino - 5 dias seguidos","Foto + texto","Caminho academia","Tenis","Texto: '06:45. Treino. 5 dias seguidos.' ou 'Sexta de manha. Quem dormiu ta aqui.'"),
+mk("08:15","B2","Pos-treino - nao destruir no fim de semana","Video falando (5s)","Academia","Rosto suado","Falar: '5 dias de treino. O fim de semana nao e pra destruir - e pra manter.' ou vulnerabilidade: '5 dias, to no limite. Mas o sono segura.'"),
+mk("08:45","B3","Aula na faculdade","Foto + texto","Sala de aula","Caderno","Contexto simples."),
+mk("09:00","B4","Caixinha - sobre o fim de semana e sono","Foto + sticker caixinha","--","--","Pergunta: 'O que muda na sua rotina no fim de semana?' ou 'Voce vai dormir mais tarde hoje porque e sexta?'"),
+mk("10:15","B3","Segunda aula","Foto + texto","Sala de aula","Material","Contexto simples.")
 ];
 MANHA["Sabado"]=[
-mk("06:30","B1","S1 - Abertura","Video falando","Varanda","Rosto, sol","Sabado. A maioria vai acordar meio-dia."),
-mk("06:30","B1","S2 - Contexto","Foto + texto","--","Ambiente calmo","Descanso nao e dormir 12h."),
-mk("06:30","B2","Habito matinal 1","Video sem fala","Banheiro","Chuveiro / sol","Sabado tambem."),
-mk("06:35","B2","Habito matinal 2","Foto + texto","Varanda","Agua / alongamento","Sem pressa."),
-mk("06:50","B2","Treino","Video sem fala","Ar livre","Tenis","Treino ou movimento"),
-mk("07:30","B2","Corrida","Video sem fala","Ar livre","Paisagem, rua vazia","O estresse sai pelas pernas."),
-mk("09:30","B4","Caixinha pessoal","Foto + sticker","Cafe","--","Pergunte qualquer coisa menos sono.")
+mk("06:30","B1","Abertura S1 - mesmo horario no sabado","Video falando (5s) ou Foto","Varanda, janela com sol, ou rosto","Rosto natural, sol, varanda","Se video: 'Sabado. 06:30. A maioria vai acordar meio-dia. Eu ja to de pe. Nao e disciplina - e que dormi 22:30.' Se foto: texto com a mesma ideia."),
+mk("06:30","B1","Abertura S2 - descanso nao e dormir 12h","Foto + texto ou Video","--","Ambiente calmo de sabado, cama arrumada, sol","Texto: 'Descanso nao e dormir 12 horas. E manter o ritmo sem ter obrigacao.' ou 'O corpo nao sabe que e fim de semana - e esse e o ponto.'"),
+mk("06:30","B2","Habito matinal 1 - sabado tambem","Video sem fala + texto","Banheiro","Chuveiro, sol, grounding","Filmar o habito. Texto: 'Sabado tambem. O corpo nao tira folga.' ou 'Banho gelado no sabado. Sim.'"),
+mk("06:35","B2","Habito matinal 2 - sem pressa","Foto + texto","Varanda ou quarto","Agua, alongamento, respiracao","Texto: 'Sem pressa. Sabado. Mesmo ritual, ritmo mais lento.'"),
+mk("06:50","B2","Treino ou atividade fisica","Video sem fala + texto","Academia ou ar livre","Tenis, equipamento","Texto: 'Treino. Sabado. 6 dias seguidos.' ou 'Sabado. Mesmo horario. Treino.'"),
+mk("07:30","B2","Corrida de sabado - rua vazia","Video sem fala + texto","Ar livre, rua vazia de sabado","Paisagem, rua vazia, sol nascendo","Filmar a corrida ou a rua vazia. Texto: 'Corrida. Rua vazia. Sabado de manha. O estresse sai pelas pernas.'"),
+mk("09:30","B4","Caixinha pessoal - lado humano (1x por semana)","Foto + sticker caixinha","Com cafe, livro, ambiente calmo","Cafe, livro","Sticker caixinha: 'Pergunte qualquer coisa - menos sobre sono.' ou 'Me recomenda um livro.' Sabado e dia de caixinha pessoal pra humanizar.")
 ];
 MANHA["Domingo"]=[
-mk("06:30","B1","S1 - Abertura","Foto calma (fixo)","Janela luz suave","Luz suave, livro","O sono de hoje define a segunda."),
-mk("06:30","B1","S2 - Contexto","Foto + texto","--","Agua, sol, livro","A semana comeca hoje."),
-mk("06:30","B2","Habito matinal 1","Video sem fala","Banheiro","Chuveiro / sol","7 dias. Semana completa."),
-mk("06:35","B2","Habito matinal 2","Foto + texto","Varanda","Agua / respiracao","O corpo nao tira folga."),
-mk("07:00","B2","Leitura / caminhada","Foto + texto","Ar livre","Livro, paisagem","Descanso ativo."),
-mk("07:30","B2","Caminhada leve","Video sem fala","Ar livre","Rua calma","Movimento leve."),
-mk("09:30","B4","Caixinha pesquisa","Foto + sticker","Caderno","--","Qual tema querem?")
+mk("06:30","B1","Abertura S1 - o sono de hoje define a segunda (FOTO CALMA fixo)","Foto calma (fixo - domingo sempre foto)","Janela com luz suave, cama arrumada, varanda","Luz suave entrando, cama feita, livro na cabeceira","Foto calma, bonita, tranquila. Texto: 'Domingo. 06:30. O sono de hoje define a segunda. O dia comecou ontem.'"),
+mk("06:30","B1","Abertura S2 - a semana comeca hoje","Foto + texto ou Video falando (5s)","--","Copo dagua, sol na janela, livro","Texto: 'A semana que vem comeca hoje. Nao amanha. Hoje. No sono de hoje.' ou falar isso olhando pra camera, tom reflexivo."),
+mk("06:30","B2","Habito matinal 1 - 7 dias, semana completa","Video sem fala + texto","Banheiro","Chuveiro, sol, grounding","Filmar o habito. Texto: '7 dias. Semana completa. Sem excecao.' ou 'Domingo. Banho gelado. 7 dias seguidos.'"),
+mk("06:35","B2","Habito matinal 2 - o corpo nao tira folga","Foto + texto","Varanda ou quarto","Agua, respiracao, celular longe","Texto: 'O corpo nao tira folga. E agradece por isso.' ou porque tecnico do habito."),
+mk("07:00","B2","Leitura ou caminhada leve - descanso ativo","Foto + texto","Ar livre ou ambiente calmo","Livro aberto, paisagem","Texto: 'Domingo. Sem treino pesado. Leitura e caminhada. Descanso ativo. O corpo descansa em movimento.'"),
+mk("07:30","B2","Caminhada leve de domingo","Video sem fala + texto","Ar livre, rua calma","Rua calma, paisagem tranquila","Filmar a caminhada. Texto: 'Caminhada leve. Movimento sem cobranca. O corpo nao fica parado.'"),
+mk("09:30","B4","Caixinha - pesquisa de conteudo pra semana","Foto + sticker caixinha","Com caderno de planejamento, cafe","Caderno, cafe","Sticker caixinha: 'Qual tema voces querem que eu aprofunde essa semana?' ou 'Sobre o que voces tem mais duvida: sono, estresse ou produtividade?'")
 ];
 
 var DEFAULT_DATA={};
